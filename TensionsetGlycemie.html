@@ -28,23 +28,20 @@ button{font-family:var(--sans)}
 button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--verm);outline-offset:2px}
 .ic{width:17px;height:17px;flex:none}
 
-/* bande d'erreur */
 .fatal{display:none;background:var(--crit2);color:#fff;font:12.5px/1.55 var(--mono);padding:10px 18px;position:relative;z-index:100}
 .fatal.show{display:block}
 
-/* en-tête */
 .masthead{max-width:1080px;margin:0 auto;padding:30px 28px 0;display:flex;justify-content:space-between;align-items:flex-end;gap:18px;position:relative;z-index:2}
 .brand{display:flex;align-items:center;gap:16px}
 .seal{width:54px;height:54px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;position:relative;background:var(--surface)}
 .seal::before{content:'';position:absolute;inset:4px;border:1px solid var(--ink);opacity:.28;border-radius:50%}
-.seal .ic{width:25px;height:25px;color:var(--pat)}
+.seal .ic{width:26px;height:26px;color:var(--pat)}
 h1{font:600 42px/1 var(--serif);letter-spacing:-.01em}
 h1 i{font-style:normal;color:var(--pat)}
 .tagline{font:600 10px var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-2);margin-top:6px}
 .mast-right{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
 .today-line{font:500 12px var(--mono);color:var(--ink-2)}
 
-/* bandeau des dossiers patients */
 .dossiers{max-width:1080px;margin:18px auto 0;padding:0 28px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:2}
 .dossiers-label{font:600 10px var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-2);margin-right:6px}
 .chip{display:inline-flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 15px 5px 6px;cursor:pointer;font:600 12.5px var(--sans);color:var(--ink-2);transition:border-color .15s,color .15s}
@@ -56,7 +53,6 @@ h1 i{font-style:normal;color:var(--pat)}
 .chip.add{padding:8px 15px;border-style:dashed;color:var(--ink-2)}
 .chip.add:hover{border-style:solid;border-color:var(--ink)}
 
-/* boutons */
 .btn{font:600 11.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--surface);border:1px solid var(--ink);padding:9px 16px;border-radius:3px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .14s,background .14s,color .14s}
 .btn .ic{width:14px;height:14px}
 .btn:hover{background:#0d1219;transform:translateY(-1px)}
@@ -64,6 +60,7 @@ h1 i{font-style:normal;color:var(--pat)}
 .btn.ghost:hover{background:var(--line-soft)}
 .btn.danger{background:transparent;color:var(--crit);border-color:var(--crit)}
 .btn.danger:hover,.btn.danger.armed{background:var(--crit);color:#fff}
+.btn:disabled{opacity:.5;cursor:wait;transform:none}
 .nav-btn{width:36px;height:36px;border:1px solid var(--line);background:var(--surface);border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink);transition:.14s}
 .nav-btn .ic{width:16px;height:16px}
 .nav-btn:hover:not(:disabled){border-color:var(--ink)}
@@ -75,19 +72,16 @@ h1 i{font-style:normal;color:var(--pat)}
 .icon-btn.armed{color:#fff;background:var(--crit)}
 .icon-btn:disabled{opacity:.3;cursor:default}
 
-/* onglets */
 .tabs{max-width:1080px;margin:12px auto 0;padding:0 28px;display:flex;gap:6px;position:relative;z-index:2}
 .tab{appearance:none;background:var(--paper);border:1px solid transparent;border-bottom:none;padding:10px 18px 11px;font:600 11.5px var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;border-radius:5px 5px 0 0;position:relative;top:1px;transition:color .15s}
 .tab:hover{color:var(--ink)}
 .tab.active{background:var(--surface);border-color:var(--ink);color:var(--ink);border-bottom:1px solid var(--surface)}
 
-/* page */
 .page{max-width:1080px;margin:0 auto;background:var(--surface);border:1px solid var(--ink);border-top:none;min-height:540px;position:relative;z-index:2;box-shadow:0 2px 0 rgba(34,42,53,.06)}
 .page::before{content:'';display:block;height:4px;background:var(--pat)}
 .site-foot{max-width:1080px;margin:0 auto;padding:18px 30px 48px;font:12.5px/1.6 var(--sans);color:var(--ink-2);position:relative;z-index:2}
 .site-foot p+p{margin-top:5px;font-style:italic;font-family:var(--serif)}
 
-/* fiche du jour */
 .sheet-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 30px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .date-nav{display:flex;align-items:center;gap:14px}
 .date-big h2{font:600 24px var(--serif);letter-spacing:-.01em}
@@ -128,8 +122,8 @@ tr.avg td{border-top:3px double var(--ink);border-bottom:none;padding-top:11px}
 .glu-label em{font:italic 12.5px var(--serif);text-transform:none;letter-spacing:0;color:var(--ink-2)}
 .glu-in{width:86px}
 .unit{font:500 11px var(--mono);color:var(--ink-2)}
+.alt{font:500 10.5px var(--mono);color:var(--faint);white-space:nowrap}
 
-/* cadran */
 .gauge-box{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;padding-top:4px}
 .gauge-box svg{width:218px;height:218px;max-width:100%}
 .gt{font:500 9px var(--mono);fill:#8A8371}
@@ -139,6 +133,8 @@ tr.avg td{border-top:3px double var(--ink);border-bottom:none;padding-top:11px}
 .gauge-val{font:600 27px var(--serif);letter-spacing:-.02em;margin-top:2px}
 .gauge-val small{font:500 12px var(--mono);color:var(--ink-2);letter-spacing:0}
 .gauge-pulse{font:500 12px var(--mono);color:var(--ink-2)}
+.gauge-badge{display:inline-flex;align-items:center;gap:6px;font:600 9px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:2px}
+.gauge-badge .ic{width:13px;height:13px;color:var(--pat)}
 .cat{display:inline-flex;align-items:center;gap:7px;font:600 10.5px var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:5px;min-height:14px}
 .cat::before{content:'';width:7px;height:7px;border-radius:50%;background:currentColor}
 .cat.c0{color:var(--ok)}.cat.c1{color:var(--olive)}.cat.c2{color:var(--warn)}.cat.c3{color:var(--high)}.cat.c4{color:var(--crit)}.cat.c5{color:var(--crit2)}
@@ -149,14 +145,14 @@ tr.avg td{border-top:3px double var(--ink);border-bottom:none;padding-top:11px}
 
 .gluco-foot{padding:15px 30px 20px;border-top:1px solid var(--line);display:flex;gap:11px;align-items:center;color:var(--ink-2);font:italic 14.5px var(--serif);flex-wrap:wrap}
 .gluco-foot .ic{width:16px;height:16px;color:var(--night)}
-.gluco-foot b{font-weight:600;color:var(--ink);font-style:normal}
+.gluco-foot b{font-weight:600;color:var(--ink);font-style:normal;font-family:var(--mono);font-size:13px}
+.gluco-foot .mut{font-size:12.5px}
 
-/* registre */
 .reg-toolbar{display:flex;align-items:center;gap:12px;padding:20px 30px;border-bottom:1px solid var(--line);flex-wrap:wrap}
 .reg-title{font:600 19px var(--serif);margin-right:auto}
 .reg-actions{display:flex;gap:8px}
 .reg-wrap{overflow-x:auto}
-table.reg{width:100%;border-collapse:collapse;min-width:860px}
+table.reg{width:100%;border-collapse:collapse;min-width:900px}
 .reg th{font:600 10px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid var(--line);padding:9px 12px;text-align:center;font-weight:600}
 .reg thead tr:first-child th{color:var(--ink);border-bottom:1px solid var(--line-soft);font-size:10.5px}
 .reg thead tr:first-child th:first-child,.reg thead tr:first-child th:last-child{color:var(--ink-2)}
@@ -173,11 +169,12 @@ table.reg{width:100%;border-collapse:collapse;min-width:860px}
 .ic.done{width:14px;height:14px;color:var(--ok);vertical-align:-2px}
 .reg tfoot td{border-top:3px double var(--ink);border-bottom:none;font-weight:600;padding-top:12px}
 
-/* courbes */
 .chart-sec{padding:26px 30px;border-bottom:1px solid var(--line)}
 .chart-sec:last-child{border-bottom:none}
 .chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
 .chart-head h3{font:600 21px var(--serif)}
+.chart-head h3 .ic{width:19px;height:19px;vertical-align:-3px;margin-right:8px;color:var(--pat)}
+.chart-head h3.g-h .ic{color:var(--night)}
 .chart-sub{font:13px var(--sans);color:var(--ink-2);margin-top:4px;max-width:560px}
 .seg{display:inline-flex;border:1px solid var(--ink);border-radius:3px;overflow:hidden}
 .seg button{background:transparent;border:0;padding:8px 14px;font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);cursor:pointer}
@@ -190,21 +187,21 @@ table.reg{width:100%;border-collapse:collapse;min-width:860px}
 .sw-seuil{border-top-style:dashed;border-color:var(--high)}
 .chart{width:100%;height:auto;display:block;margin-top:4px}
 .ax{font:500 10.5px var(--mono);fill:#98917C}
+.ptl{font:600 10px var(--mono);paint-order:stroke;stroke:#FCFAF3;stroke-width:3px;stroke-linejoin:round}
 .seui{font:600 10px var(--sans);letter-spacing:.05em}
 .pt{cursor:pointer}
 .stats-line{display:flex;flex-wrap:wrap;gap:8px 0;padding:16px 2px 0;font:13.5px var(--sans);color:var(--ink-2)}
 .stats-line>span+span::before{content:'·';margin:0 13px;color:var(--line)}
-.stats-line b{font:600 15px var(--mono);color:var(--ink)}
+.stats-line b{font:600 14px var(--mono);color:var(--ink)}
 .empty{display:flex;gap:11px;align-items:center;padding:26px 2px;color:var(--ink-2);font:italic 15.5px var(--serif)}
 .empty .ic{width:20px;height:20px;color:var(--faint)}
 
-/* tooltip / toasts / modal */
 #tip{position:fixed;z-index:80;pointer-events:none;background:var(--ink);color:var(--surface);padding:9px 12px;border-radius:4px;opacity:0;transform:translate(-50%,calc(-100% - 12px));transition:opacity .13s;white-space:nowrap}
 #tip.show{opacity:1}
 #tip .t-date{font:italic 11.5px var(--serif);opacity:.72}
 #tip .t-val{font:600 13px var(--mono);margin-top:3px}
 #toasts{position:fixed;right:22px;bottom:22px;z-index:90;display:flex;flex-direction:column;gap:9px}
-.toast{display:flex;gap:11px;align-items:center;background:var(--ink);color:var(--surface);padding:12px 17px;border-radius:4px;font:13.5px var(--sans);box-shadow:0 8px 24px rgba(20,25,32,.25);animation:tin .25s ease;max-width:360px}
+.toast{display:flex;gap:11px;align-items:center;background:var(--ink);color:var(--surface);padding:12px 17px;border-radius:4px;font:13.5px var(--sans);box-shadow:0 8px 24px rgba(20,25,32,.25);animation:tin .25s ease;max-width:380px}
 .toast .ic{width:16px;height:16px;color:#9CC5A5}
 .toast.warn .ic{color:#E5A493}
 .toast.out{animation:tout .26s forwards}
@@ -229,7 +226,7 @@ table.reg{width:100%;border-collapse:collapse;min-width:860px}
 .m-actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:16px;border-top:1px dashed var(--line)}
 .m-foot{padding:14px 22px 18px;display:flex;justify-content:flex-end}
 
-/* impression */
+/* secours : impression système (si le module PDF est indisponible) */
 #print-report{display:none}
 @media print{
   body>*:not(#print-report){display:none!important}
@@ -246,7 +243,6 @@ table.reg{width:100%;border-collapse:collapse;min-width:860px}
   @page{margin:13mm}
 }
 
-/* responsive */
 @media(max-width:920px){
   .slot-body{grid-template-columns:1fr}
   .gauge-box{order:2;padding-top:10px}
@@ -303,8 +299,8 @@ table.reg{width:100%;border-collapse:collapse;min-width:860px}
 </main>
 
 <footer class="site-foot">
-  <p>Chaque patient possède son propre carnet — basculez de l’un à l’autre avec les dossiers du bandeau. La glycémie se note chaque jour : à jeun le matin, puis le soir. Repères : au domicile, une tension moyenne ≥ 135/85 mmHg évoque une hypertension ; à jeun, une glycémie ≥ 126 mg/dL (7,0 mmol/L) un diabète — dans les deux cas, à confirmer par votre médecin.</p>
-  <p>Vos données restent enregistrées sur cet appareil uniquement. Ce carnet accompagne le suivi prescrit, il ne remplace pas un avis médical.</p>
+  <p>Chaque patient possède son propre carnet — basculez de l’un à l’autre avec les dossiers du bandeau. Toutes les valeurs de glycémie s’affichent en mmol/L avec la conversion en mg/dL entre parenthèses ; le bouton « Télécharger PDF » du registre produit un rapport prêt à transmettre.</p>
+  <p>Repères : au domicile, une tension moyenne ≥ 135/85 mmHg évoque une hypertension ; à jeun, une glycémie ≥ 7,0 mmol/L (126 mg/dL) un diabète — à confirmer par votre médecin. Vos données restent sur cet appareil.</p>
 </footer>
 
 <div id="toasts"></div>
@@ -373,7 +369,8 @@ const initials=name=>{const w=String(name||'').trim().split(/\s+/).filter(Boolea
 const ICONS={
  sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
  moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
- pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+ tensiometer:'<circle cx="6.5" cy="6.5" r="3.5"/><path d="M6.5 6.5l1.6-1.4"/><path d="M6.5 10v2.5a3 3 0 0 0 3 3H10"/><rect x="10" y="12.5" width="11" height="8.5" rx="2"/><path d="M13.5 12.5V10h4v2.5"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/>',
  activity:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
  check:'<path d="M20 6 9 17l-5-5"/>',
  x:'<path d="M18 6 6 18M6 6l12 12"/>',
@@ -381,10 +378,8 @@ const ICONS={
  chevL:'<path d="m15 18-6-6 6-6"/>',
  chevR:'<path d="m9 18 6-6-6-6"/>',
  droplet:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
- heart:'<path d="M19 14c1.5-1.5 3-3.2 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.8 0-3 .5-4.5 2-1.5-1.5-2.7-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4 3 5.5l7 7Z"/>',
  download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
  up:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
- printer:'<path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/>',
  calendar:'<rect x="3" y="5" width="18" height="16" rx="1"/><path d="M16 3v4M8 3v4M3 10h18"/>',
  alert:'<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
  trash:'<path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>'};
@@ -413,9 +408,7 @@ function normalizeStore(raw){
 function loadStore(){
   let raw=null;
   try{raw=JSON.parse(localStorage.getItem(LS))}catch(_){}
-  /* format multi-patients déjà présent */
   if(raw&&Array.isArray(raw.patients)&&raw.patients.length)return normalizeStore(raw);
-  /* migration depuis l'ancien carnet unique (systole.v1) */
   let old=null;
   try{old=JSON.parse(localStorage.getItem('systole.v1'))}catch(_){}
   if(old&&old.days&&typeof old.days==='object'&&Object.keys(old.days).length){
@@ -434,7 +427,6 @@ const peekDay=k=>cur().days[k];
 const getDay=k=>peekDay(k)||(cur().days[k]={morning:newSlot(),evening:newSlot()});
 function applyPatientTheme(){document.documentElement.style.setProperty('--pat',PATS[cur().color%6])}
 
-/* ============ données d'une prise ============ */
 const newSlot=()=>({m:[{s:'',d:'',p:''},{s:'',d:'',p:''},{s:'',d:'',p:''}],g:'',done:false,doneAt:null});
 
 /* ============ interprétation ============ */
@@ -471,6 +463,8 @@ function glucoCat(v,slot){
   if(v<180)return{l:'Légèrement élevée',c:'#A87F2E'};
   return{l:'Très élevée',c:'#A93A2A'};
 }
+/* la saisie se fait dans l'unité du dossier, mais l'AFFICHAGE est toujours :
+   « X,X mmol/L (YYY mg/dL) » — la parenthèse est toujours en mg. */
 const gUnit=()=>cur().unit==='mmol';
 const gUnitLabel=()=>gUnit()?'mmol/L':'mg/dL';
 const gShow=v=>{
@@ -478,6 +472,18 @@ const gShow=v=>{
   if(gUnit())return (v/18).toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1});
   return String(Math.round(v));
 };
+function dualFull(mg){
+  if(mg==null||!isFinite(mg))return'—';
+  return frN(mg/18,1)+' mmol/L <span class="alt">('+frN(mg,0)+' mg/dL)</span>';
+}
+function dualPlain(mg){
+  if(mg==null||!isFinite(mg))return'—';
+  return frN(mg/18,1)+' mmol/L ('+frN(mg,0)+' mg/dL)';
+}
+function dualCompact(mg){
+  if(mg==null||!isFinite(mg))return'—';
+  return frN(mg/18,1)+' ('+frN(mg,0)+')';
+}
 
 /* ============ cadran ============ */
 const GA={v0:40,v1:200,a0:-210,a1:30};
@@ -486,17 +492,17 @@ const gTimers={};
 function gaugeSVG(){
   const cx=105,cy=105;
   const P=(r,a)=>{const t=a*Math.PI/180;return[cx+r*Math.cos(t),cy+r*Math.sin(t)]};
-  const arc=(r,f,t)=>{const p1=P(r,f),p2=P(r,t);return`M ${p1[0].toFixed(2)} ${p1[1].toFixed(2)} A ${r} ${r} 0 ${(t-f)>180?1:0} 1 ${p2[0].toFixed(2)} ${p2[1].toFixed(2)}`};
+  const arc=(r,f,t)=>{const p1=P(r,f),p2=P(r,t);return'M '+p1[0].toFixed(2)+' '+p1[1].toFixed(2)+' A '+r+' '+r+' 0 '+((t-f)>180?1:0)+' 1 '+p2[0].toFixed(2)+' '+p2[1].toFixed(2)};
   let s='<svg viewBox="0 0 210 210" aria-hidden="true">';
   const zones=[[40,120,'#3E6B4F'],[120,130,'#6E7F3C'],[130,140,'#A87F2E'],[140,160,'#B05F2C'],[160,180,'#A93A2A'],[180,200,'#8C2430']];
-  zones.forEach(z=>{s+=`<path d="${arc(84,Adeg(z[0])+.9,Adeg(z[1])-.9)}" stroke="${z[2]}" stroke-width="11" fill="none" opacity=".48"/>`});
+  zones.forEach(z=>{s+='<path d="'+arc(84,Adeg(z[0])+.9,Adeg(z[1])-.9)+'" stroke="'+z[2]+'" stroke-width="11" fill="none" opacity=".48"/>'});
   for(let v=40;v<=200;v+=10){
     const a=Adeg(v),maj=v%40===0,p1=P(maj?61:66.5,a),p2=P(73,a);
-    s+=`<line x1="${p1[0].toFixed(1)}" y1="${p1[1].toFixed(1)}" x2="${p2[0].toFixed(1)}" y2="${p2[1].toFixed(1)}" stroke="#8A8371" stroke-width="${maj?1.6:1}"/>`;
+    s+='<line x1="'+p1[0].toFixed(1)+'" y1="'+p1[1].toFixed(1)+'" x2="'+p2[0].toFixed(1)+'" y2="'+p2[1].toFixed(1)+'" stroke="#8A8371" stroke-width="'+(maj?1.6:1)+'"/>';
   }
   [40,80,120,160,200].forEach(v=>{
     const p=P(50,Adeg(v));
-    s+=`<text x="${p[0].toFixed(1)}" y="${(p[1]+3.2).toFixed(1)}" text-anchor="middle" class="gt">${v}</text>`;
+    s+='<text x="'+p[0].toFixed(1)+'" y="'+(p[1]+3.2).toFixed(1)+'" text-anchor="middle" class="gt">'+v+'</text>';
   });
   s+='<text x="105" y="169" text-anchor="middle" class="gu">mmHg</text>';
   s+='<g class="g-rot g-dia" transform="rotate(-210 105 105)"><polygon points="197,105 206,100.4 206,109.6" fill="#B23A2A"/></g>';
@@ -512,17 +518,17 @@ function setGauge(name,st,sweep){
   clearTimeout(gTimers[name]);
   if(sweep){
     sys.classList.add('sweep');dia.classList.add('sweep');
-    sys.style.transform=`rotate(${Adeg(197)}deg)`;
-    dia.style.transform=`rotate(${Adeg(97)}deg)`;
-    gTimers[name]=setTimeout(()=>{
+    sys.style.transform='rotate('+Adeg(197)+'deg)';
+    dia.style.transform='rotate('+Adeg(97)+'deg)';
+    gTimers[name]=setTimeout(function(){
       sys.classList.remove('sweep');dia.classList.remove('sweep');
-      sys.style.transform=`rotate(${tS}deg)`;dia.style.transform=`rotate(${tD}deg)`;
+      sys.style.transform='rotate('+tS+'deg)';dia.style.transform='rotate('+tD+'deg)';
     },500);
   }else{
-    sys.style.transform=`rotate(${tS}deg)`;dia.style.transform=`rotate(${tD}deg)`;
+    sys.style.transform='rotate('+tS+'deg)';dia.style.transform='rotate('+tD+'deg)';
   }
-  document.getElementById('gv-'+name).innerHTML=st?`${st.sys}<small> / ${st.dia}</small> <small>mmHg</small>`:`—<small> / —</small> <small>mmHg</small>`;
-  document.getElementById('gp-'+name).textContent=st?(st.hr!=null?`pouls moyen ${st.hr} bpm`:'pouls non saisi'):'en attente de mesures';
+  document.getElementById('gv-'+name).innerHTML=st?(st.sys+'<small> / '+st.dia+'</small> <small>mmHg</small>'):('—<small> / —</small> <small>mmHg</small>');
+  document.getElementById('gp-'+name).textContent=st?(st.hr!=null?('pouls moyen '+st.hr+' bpm'):'pouls non saisi'):'en attente de mesures';
   const ce=document.getElementById('gc-'+name);
   if(st){const c=bpCat(st.sys,st.dia);ce.textContent=c.l;ce.className='cat '+c.k}
   else{ce.textContent='';ce.className='cat'}
@@ -536,13 +542,13 @@ function renderDossiers(){
   const host=$('#dossiers');
   const chips=store.patients.map(p=>{
     const act=p.id===store.active,col=PATS[p.color%6];
-    return `<button type="button" class="chip ${act?'active':''}" data-id="${p.id}" style="--pc:${col}" title="Carnet de ${esc(p.name)}">
-      <span class="seal-mini">${esc(initials(p.name))}</span><span>${esc(p.name)}</span></button>`;
+    return '<button type="button" class="chip '+(act?'active':'')+'" data-id="'+p.id+'" style="--pc:'+col+'">'+
+      '<span class="seal-mini" style="background:'+col+'">'+esc(initials(p.name))+'</span><span>'+esc(p.name)+'</span></button>';
   }).join('');
   const addBtn=store.patients.length<MAX_PAT
-    ?`<button type="button" class="chip add" id="chipAdd">${icon('plus')} Nouveau dossier</button>`
-    :`<span class="mut" style="font:italic 12px var(--serif)">maximum de ${MAX_PAT} dossiers atteint</span>`;
-  host.innerHTML=`<span class="dossiers-label">Dossiers</span>${chips}${addBtn}`;
+    ?'<button type="button" class="chip add" id="chipAdd">'+icon('plus')+' Nouveau dossier</button>'
+    :'<span class="mut" style="font:italic 12px var(--serif)">maximum de '+MAX_PAT+' dossiers atteint</span>';
+  host.innerHTML='<span class="dossiers-label">Dossiers</span>'+chips+addBtn;
   host.querySelectorAll('.chip[data-id]').forEach(ch=>{
     ch.onclick=()=>{
       if(store.active===ch.dataset.id)return;
@@ -551,7 +557,7 @@ function renderDossiers(){
       save();applyPatientTheme();switchTab(state.tab);
     };
   });
-  const add=$('#chipAdd');
+  const add=document.getElementById('chipAdd');
   if(add)add.onclick=addPatient;
 }
 function addPatient(){
@@ -573,22 +579,22 @@ const SLOT_META={
 function renderSheet(){
   const host=$('#view-today');
   const isToday=state.date===todayISO();
-  host.innerHTML=`
-   <div class="sheet-head">
-    <div class="date-nav">
-      <button class="nav-btn" id="dPrev" aria-label="Jour précédent">${icon('chevL')}</button>
-      <div class="date-big"><h2>${fmtLong(state.date)}</h2></div>
-      <button class="nav-btn" id="dNext" aria-label="Jour suivant" ${isToday?'disabled':''}>${icon('chevR')}</button>
-    </div>
-    <div class="head-right">
-      <button class="link-btn" id="dToday" ${isToday?'hidden':''}>revenir à aujourd’hui</button>
-      <p class="now-hint" id="nowHint"></p>
-    </div>
-   </div>
-   <section class="slot morning" id="slot-morning" data-slot="morning"></section>
-   <div class="slot-rule"><span></span></div>
-   <section class="slot evening" id="slot-evening" data-slot="evening"></section>
-   <div class="gluco-foot" id="glucoFoot"></div>`;
+  host.innerHTML=
+   '<div class="sheet-head">'+
+    '<div class="date-nav">'+
+      '<button class="nav-btn" id="dPrev" aria-label="Jour précédent">'+icon('chevL')+'</button>'+
+      '<div class="date-big"><h2>'+fmtLong(state.date)+'</h2></div>'+
+      '<button class="nav-btn" id="dNext" aria-label="Jour suivant" '+(isToday?'disabled':'')+'>'+icon('chevR')+'</button>'+
+    '</div>'+
+    '<div class="head-right">'+
+      '<button class="link-btn" id="dToday" '+(isToday?'hidden':'')+'>revenir à aujourd’hui</button>'+
+      '<p class="now-hint" id="nowHint"></p>'+
+    '</div>'+
+   '</div>'+
+   '<section class="slot morning" id="slot-morning" data-slot="morning"></section>'+
+   '<div class="slot-rule"><span></span></div>'+
+   '<section class="slot evening" id="slot-evening" data-slot="evening"></section>'+
+   '<div class="gluco-foot" id="glucoFoot"></div>';
   $('#dPrev').onclick=()=>{state.date=iso(addDays(fromISO(state.date),-1));renderSheet()};
   $('#dNext').onclick=()=>{state.date=iso(addDays(fromISO(state.date),1));renderSheet()};
   $('#dToday').onclick=()=>{state.date=todayISO();renderSheet()};
@@ -598,8 +604,8 @@ function renderSheet(){
 
 function slotStateHTML(sl){
   if(sl.done&&slotStats(sl))
-    return `<span class="done-note">${icon('check')} validée${sl.doneAt?' · '+sl.doneAt:''}</span><button class="link-btn b-unval">modifier</button>`;
-  return `<button class="btn b-val">${icon('check')} Valider la prise</button>`;
+    return '<span class="done-note">'+icon('check')+' validée'+(sl.doneAt?(' · '+sl.doneAt):'')+'</span><button class="link-btn b-unval">modifier</button>';
+  return '<button class="btn b-val">'+icon('check')+' Valider la prise</button>';
 }
 function setSlotState(name,sl){
   const el=document.getElementById('state-'+name);if(!el)return;
@@ -612,35 +618,36 @@ function renderSlot(name){
   const day=getDay(state.date),sl=day[name],meta=SLOT_META[name];
   const rows=[0,1,2].map(i=>{
     const m=sl.m[i];
-    return `<tr>
-      <td class="rn">${['I','II','III'][i]}</td>
-      <td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="s" data-i="${i}" value="${esc(m.s)}" placeholder="—" aria-label="Systolique, mesure ${i+1}"></td>
-      <td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="d" data-i="${i}" value="${esc(m.d)}" placeholder="—" aria-label="Diastolique, mesure ${i+1}"></td>
-      <td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="p" data-i="${i}" value="${esc(m.p)}" placeholder="—" aria-label="Pouls, mesure ${i+1}"></td>
-    </tr>`}).join('');
-  document.getElementById('slot-'+name).innerHTML=`
-    <div class="slot-head">
-      ${icon(meta.icon)}<span class="slot-title">${meta.t}</span>
-      <span class="slot-sub">${meta.sub}</span>
-      <span class="slot-state" id="state-${name}"></span>
-    </div>
-    <div class="slot-body">
-      <div>
-        <table class="meas">
-          <thead><tr><th>Mesure</th><th>Systolique<em>mmHg</em></th><th>Diastolique<em>mmHg</em></th><th>Pouls<em>bpm</em></th></tr></thead>
-          <tbody>${rows}</tbody>
-          <tfoot><tr class="avg"><td class="rn avg-lbl">moy.</td><td class="avg-cell" id="avg-${name}-s">—</td><td class="avg-cell" id="avg-${name}-d">—</td><td class="avg-cell" id="avg-${name}-p">—</td></tr></tfoot>
-        </table>
-        ${gluLineHTML(name,sl)}
-        <div class="slot-err" id="err-${name}"></div>
-      </div>
-      <div class="gauge-box">
-        ${gaugeSVG()}
-        <div class="gauge-val" id="gv-${name}"></div>
-        <div class="gauge-pulse" id="gp-${name}"></div>
-        <div class="cat" id="gc-${name}"></div>
-      </div>
-    </div>`;
+    return '<tr>'+
+      '<td class="rn">'+['I','II','III'][i]+'</td>'+
+      '<td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="s" data-i="'+i+'" value="'+esc(m.s)+'" placeholder="—" aria-label="Systolique, mesure '+(i+1)+'"></td>'+
+      '<td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="d" data-i="'+i+'" value="'+esc(m.d)+'" placeholder="—" aria-label="Diastolique, mesure '+(i+1)+'"></td>'+
+      '<td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="p" data-i="'+i+'" value="'+esc(m.p)+'" placeholder="—" aria-label="Pouls, mesure '+(i+1)+'"></td>'+
+    '</tr>'}).join('');
+  document.getElementById('slot-'+name).innerHTML=
+    '<div class="slot-head">'+
+      icon(meta.icon)+'<span class="slot-title">'+meta.t+'</span>'+
+      '<span class="slot-sub">'+meta.sub+'</span>'+
+      '<span class="slot-state" id="state-'+name+'"></span>'+
+    '</div>'+
+    '<div class="slot-body">'+
+      '<div>'+
+        '<table class="meas">'+
+          '<thead><tr><th>Mesure</th><th>Systolique<em>mmHg</em></th><th>Diastolique<em>mmHg</em></th><th>Pouls<em>bpm</em></th></tr></thead>'+
+          '<tbody>'+rows+'</tbody>'+
+          '<tfoot><tr class="avg"><td class="rn avg-lbl">moy.</td><td class="avg-cell" id="avg-'+name+'-s">—</td><td class="avg-cell" id="avg-'+name+'-d">—</td><td class="avg-cell" id="avg-'+name+'-p">—</td></tr></tfoot>'+
+        '</table>'+
+        gluLineHTML(name,sl)+
+        '<div class="slot-err" id="err-'+name+'"></div>'+
+      '</div>'+
+      '<div class="gauge-box">'+
+        gaugeSVG()+
+        '<div class="gauge-val" id="gv-'+name+'"></div>'+
+        '<div class="gauge-pulse" id="gp-'+name+'"></div>'+
+        '<div class="gauge-badge">'+icon('tensiometer')+' tensiomètre · moyenne</div>'+
+        '<div class="cat" id="gc-'+name+'"></div>'+
+      '</div>'+
+    '</div>';
   $$('#slot-'+name+' .cell-in').forEach(inp=>{
     if(inp.classList.contains('glu-in'))inp.addEventListener('input',onGlu);
     else inp.addEventListener('input',onCell);
@@ -650,25 +657,25 @@ function renderSlot(name){
   refreshSlot(name,true);
 }
 
-/* glycémie : visible en permanence, matin ET soir */
 function gluLineHTML(name,sl){
   const val=sl.g===''?'':gShow(+sl.g);
   const em=name==='morning'?'· à jeun':'· le soir';
-  return `<div class="glu-line">
-    <span class="glu-label">${icon('droplet')} Glycémie <em>${em}</em></span>
-    <input class="cell-in glu-in" inputmode="decimal" value="${esc(val)}" placeholder="—" aria-label="Glycémie ${name==='morning'?'du matin à jeun':'du soir'}">
-    <span class="unit">${gUnitLabel()}</span>
-    <span class="cat" id="gcat-${name}"></span>
-  </div>`;
+  return '<div class="glu-line">'+
+    '<span class="glu-label">'+icon('droplet')+' Glycémie <em>'+em+'</em></span>'+
+    '<input class="cell-in glu-in" inputmode="decimal" value="'+esc(val)+'" placeholder="—" aria-label="Glycémie '+(name==='morning'?'du matin à jeun':'du soir')+'">'+
+    '<span class="unit">'+gUnitLabel()+'</span>'+
+    '<span class="alt" id="galt-'+name+'"></span>'+
+    '<span class="cat" id="gcat-'+name+'"></span>'+
+  '</div>';
 }
 
 function onCell(e){
-  const inp=e.target,{f,i}=inp.dataset;
+  const inp=e.target,f=inp.dataset.f,i=+inp.dataset.i;
   const name=inp.closest('.slot').dataset.slot;
   const sl=getDay(state.date)[name];
   const v=inp.value.replace(/[^\d]/g,'');
   if(v!==inp.value)inp.value=v;
-  sl.m[+i][f]=v;
+  sl.m[i][f]=v;
   if(sl.done){sl.done=false;sl.doneAt=null;setSlotState(name,sl)}
   save();refreshSlot(name);
 }
@@ -695,8 +702,8 @@ function crossCheck(name){
   if(!host)return false;
   let bad=false;
   sl.m.forEach((m,i)=>{
-    const sEl=host.querySelector(`.cell-in[data-i="${i}"][data-f="s"]`);
-    const dEl=host.querySelector(`.cell-in[data-i="${i}"][data-f="d"]`);
+    const sEl=host.querySelector('.cell-in[data-i="'+i+'"][data-f="s"]');
+    const dEl=host.querySelector('.cell-in[data-i="'+i+'"][data-f="d"]');
     if(!sEl||!dEl)return;
     const badM=validM(m)&&(+m.d>=+m.s);
     sEl.classList.toggle('err',badM);dEl.classList.toggle('err',badM);
@@ -716,6 +723,8 @@ function refreshSlot(name,sweep=false){
     const c=(sl.g!=='')?glucoCat(+sl.g,name):null;
     gc.textContent=c?c.l:'';gc.style.color=c?c.c:'';
   }
+  const ga=document.getElementById('galt-'+name);
+  if(ga)ga.textContent=(sl.g!=='')?('= '+dualPlain(+sl.g)):'';
   crossCheck(name);
 }
 function validateSlot(name){
@@ -724,7 +733,7 @@ function validateSlot(name){
   if(crossCheck(name)){toast('Corrigez la mesure signalée avant de valider.','alert');return}
   sl.done=true;sl.doneAt=FR.hm.format(new Date());
   save();setSlotState(name,sl);
-  toast(`${SLOT_META[name].t} — moyenne ${st.sys}/${st.dia} mmHg enregistrée pour ${esc(cur().name)}.`);
+  toast(SLOT_META[name].t+' — moyenne '+st.sys+'/'+st.dia+' mmHg enregistrée pour '+esc(cur().name)+'.');
   renderNowHint();renderGlucoFoot();
 }
 
@@ -743,15 +752,27 @@ function renderGlucoFoot(){
   const host=document.getElementById('glucoFoot');if(!host)return;
   const day=getDay(state.date);
   const m=day.morning.g!=='',e=day.evening.g!=='';
+  const d7=collectDaily(7);
+  const m7=d7.map(p=>p.gm).filter(v=>v!=null);
+  const e7=d7.map(p=>p.ge).filter(v=>v!=null);
+  let base;
   if(m&&e){
-    host.innerHTML=`${icon('droplet')} <span>Glycémie du jour — <b>${gShow(+day.morning.g)}</b> à jeun le matin · <b>${gShow(+day.evening.g)}</b> le soir.</span>`;
+    base='Glycémie du jour — matin <b>'+dualFull(+day.morning.g)+'</b> à jeun · soir <b>'+dualFull(+day.evening.g)+'</b>.';
   }else if(m){
-    host.innerHTML=`${icon('droplet')} <span>Glycémie du matin notée (<b>${gShow(+day.morning.g)}</b>) — pensez au contrôle du soir.</span>`;
+    base='Glycémie du matin notée (<b>'+dualFull(+day.morning.g)+'</b>) — pensez au contrôle du soir.';
   }else if(e){
-    host.innerHTML=`${icon('droplet')} <span>Glycémie du soir notée (<b>${gShow(+day.evening.g)}</b>) — la valeur du matin à jeun manque.</span>`;
+    base='Glycémie du soir notée (<b>'+dualFull(+day.evening.g)+'</b>) — la valeur du matin à jeun manque.';
   }else{
-    host.innerHTML=`${icon('droplet')} <span>Glycémie du jour à noter : <b>à jeun le matin</b>, puis <b>le soir</b> — les champs se trouvent dans chaque prise ci-dessus.</span>`;
+    base='Glycémie du jour à noter : <b>à jeun le matin</b>, puis <b>le soir</b> — les champs se trouvent dans chaque prise ci-dessus.';
   }
+  let moy='';
+  if(m7.length||e7.length){
+    const parts=[];
+    if(m7.length)parts.push('matin '+dualFull(Math.round(avg(m7))));
+    if(e7.length)parts.push('soir '+dualFull(Math.round(avg(e7))));
+    moy=' <span class="mut">Moyenne 7 jours — '+parts.join(' · ')+'.</span>';
+  }
+  host.innerHTML=icon('droplet')+' <span>'+base+moy+'</span>';
 }
 
 /* ============ registre ============ */
@@ -761,28 +782,28 @@ function renderRegister(){
   const end=addDays(start,6);
   const days=[0,1,2,3,4,5,6].map(i=>iso(addDays(start,i)));
   const yr=start.getFullYear()!==new Date().getFullYear()?' '+end.getFullYear():'';
-  host.innerHTML=`
-   <div class="reg-toolbar">
-     <button class="nav-btn" id="wPrev" aria-label="Semaine précédente">${icon('chevL')}</button>
-     <button class="nav-btn" id="wNext" aria-label="Semaine suivante" ${state.weekOffset>=0?'disabled':''}>${icon('chevR')}</button>
-     <h3 class="reg-title">${esc(cur().name)} — semaine du ${fmtDay(iso(start))} au ${fmtDay(iso(end))}${yr}</h3>
-     <div class="reg-actions">
-       <button class="btn ghost" id="btnCsv">${icon('download')} Export CSV</button>
-       <button class="btn ghost" id="btnPrint">${icon('printer')} Imprimer</button>
-     </div>
-   </div>
-   <div class="reg-wrap"><table class="reg">
-     <thead>
-       <tr><th rowspan="2" class="tleft">Jour</th><th colspan="3">Matin</th><th colspan="3">Soir</th><th colspan="2">Glycémie</th></tr>
-       <tr><th>Tension</th><th>Pouls</th><th>État</th><th>Tension</th><th>Pouls</th><th>État</th><th>Matin</th><th>Soir</th></tr>
-     </thead>
-     <tbody id="regBody">${days.map(regRow).join('')}</tbody>
-     <tfoot>${regFoot(days)}</tfoot>
-   </table></div>`;
+  host.innerHTML=
+   '<div class="reg-toolbar">'+
+     '<button class="nav-btn" id="wPrev" aria-label="Semaine précédente">'+icon('chevL')+'</button>'+
+     '<button class="nav-btn" id="wNext" aria-label="Semaine suivante" '+(state.weekOffset>=0?'disabled':'')+'>'+icon('chevR')+'</button>'+
+     '<h3 class="reg-title">'+esc(cur().name)+' — semaine du '+fmtDay(iso(start))+' au '+fmtDay(iso(end))+yr+'</h3>'+
+     '<div class="reg-actions">'+
+       '<button class="btn ghost" id="btnCsv">'+icon('download')+' Export CSV</button>'+
+       '<button class="btn ghost" id="btnPdf">'+icon('file')+' Télécharger PDF</button>'+
+     '</div>'+
+   '</div>'+
+   '<div class="reg-wrap"><table class="reg">'+
+     '<thead>'+
+       '<tr><th rowspan="2" class="tleft">Jour</th><th colspan="3">Matin</th><th colspan="3">Soir</th><th colspan="2">Glycémie · mmol/L (mg/dL)</th></tr>'+
+       '<tr><th>Tension</th><th>Pouls</th><th>État</th><th>Tension</th><th>Pouls</th><th>État</th><th>Matin</th><th>Soir</th></tr>'+
+     '</thead>'+
+     '<tbody id="regBody">'+days.map(regRow).join('')+'</tbody>'+
+     '<tfoot>'+regFoot(days)+'</tfoot>'+
+   '</table></div>';
   $('#wPrev').onclick=()=>{state.weekOffset--;renderRegister()};
   $('#wNext').onclick=()=>{state.weekOffset++;renderRegister()};
   $('#btnCsv').onclick=exportCSV;
-  $('#btnPrint').onclick=printReport;
+  $('#btnPdf').onclick=generatePDF;
   $('#regBody').addEventListener('click',e=>{
     const tr=e.target.closest('tr[data-d]');if(!tr)return;
     state.date=tr.dataset.d;switchTab('today');
@@ -792,16 +813,16 @@ function regCell(sl){
   const st=sl?slotStats(sl):null;
   if(!st)return'<td class="mut">—</td><td class="mut">—</td><td class="mut">—</td>';
   const c=bpCat(st.sys,st.dia);
-  return `<td><span class="dot" style="background:${c.c}"></span><b>${st.sys}/${st.dia}</b></td><td>${st.hr!=null?st.hr:'<span class="mut">—</span>'}</td><td>${sl.done?icon('check','done'):''}</td>`;
+  return '<td><span class="dot" style="background:'+c.c+'"></span><b>'+st.sys+'/'+st.dia+'</b></td><td>'+(st.hr!=null?st.hr:'<span class="mut">—</span>')+'</td><td>'+(sl.done?icon('check','done'):'')+'</td>';
 }
 function regRow(k){
   const d=peekDay(k),today=k===todayISO();
-  const gv=sl=>(sl&&sl.g!=='')?gShow(+sl.g):'<span class="mut">—</span>';
-  return `<tr data-d="${k}" class="${today?'today-row':''}">
-    <td class="day">${fmtDay(k)}${today?' <span class="you">— aujourd’hui</span>':''}</td>
-    ${regCell(d&&d.morning)}${regCell(d&&d.evening)}
-    <td>${gv(d&&d.morning)}</td><td>${gv(d&&d.evening)}</td>
-  </tr>`;
+  const gv=sl=>(sl&&sl.g!=='')?dualCompact(+sl.g):'<span class="mut">—</span>';
+  return '<tr data-d="'+k+'" class="'+(today?'today-row':'')+'">'+
+    '<td class="day">'+fmtDay(k)+(today?' <span class="you">— aujourd’hui</span>':'')+'</td>'+
+    regCell(d&&d.morning)+regCell(d&&d.evening)+
+    '<td>'+gv(d&&d.morning)+'</td><td>'+gv(d&&d.evening)+'</td>'+
+  '</tr>';
 }
 function regFoot(days){
   const c={ms:[],md:[],mp:[],es:[],ed:[],ep:[],gm:[],ge:[]};
@@ -814,15 +835,16 @@ function regFoot(days){
     if(d.evening.g!=='')c.ge.push(+d.evening.g);
   });
   const f=(a,dec=0)=>a.length?frN(avg(a),dec):'—';
-  return `<tr><td class="day">Moyenne de la semaine</td>
-    <td><b>${f(c.ms)}/${f(c.md)}</b></td><td>${f(c.mp)}</td><td></td>
-    <td><b>${f(c.es)}/${f(c.ed)}</b></td><td>${f(c.ep)}</td><td></td>
-    <td>${f(c.gm,gUnit()?1:0)}</td><td>${f(c.ge,gUnit()?1:0)}</td></tr>`;
+  return '<tr><td class="day">Moyenne de la semaine</td>'+
+    '<td><b>'+f(c.ms)+'/'+f(c.md)+'</b></td><td>'+f(c.mp)+'</td><td></td>'+
+    '<td><b>'+f(c.es)+'/'+f(c.ed)+'</b></td><td>'+f(c.ep)+'</td><td></td>'+
+    '<td>'+dualFull(c.gm.length?avg(c.gm):null)+'</td>'+
+    '<td>'+dualFull(c.ge.length?avg(c.ge):null)+'</td></tr>';
 }
 
-/* ============ export / impression ============ */
+/* ============ export CSV ============ */
 function exportCSV(){
-  const rows=[['Date','Patient','Moment','SYS 1','DIA 1','Pouls 1','SYS 2','DIA 2','Pouls 2','SYS 3','DIA 3','Pouls 3','Moy. SYS','Moy. DIA','Moy. pouls','Interprétation','Glycémie','Unité','Validée']];
+  const rows=[['Date','Patient','Moment','SYS 1','DIA 1','Pouls 1','SYS 2','DIA 2','Pouls 2','SYS 3','DIA 3','Pouls 3','Moy. SYS','Moy. DIA','Moy. pouls','Interprétation','Gly mmol/L','Gly mg/dL','Validée']];
   let count=0;
   store.patients.forEach(pat=>{
     Object.keys(pat.days).sort().forEach(k=>{
@@ -833,233 +855,408 @@ function exportCSV(){
         if(!any)return;
         count++;
         const st=slotStats(sl),ms=sl.m;
+        const mg=sl.g!==''?+sl.g:'';
         rows.push([k,pat.name,nm,ms[0].s,ms[0].d,ms[0].p,ms[1].s,ms[1].d,ms[1].p,ms[2].s,ms[2].d,ms[2].p,
           st?st.sys:'',st?st.dia:'',(st&&st.hr!=null)?st.hr:'',st?bpCat(st.sys,st.dia).l:'',
-          sl.g!==''?gShow(+sl.g):'',sl.g!==''?gUnitLabel():'',sl.done?'oui':'non']);
+          mg!==''?frN(mg/18,1):'',mg!==''?Math.round(mg):'',sl.done?'oui':'non']);
       });
     });
   });
   if(!count){toast('Aucune donnée à exporter pour l’instant.','alert');return}
-  const csv='\ufeff'+rows.map(r=>r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(';')).join('\r\n');
+  const csv='\ufeff'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\r\n');
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));
   a.download='carnets-tension-'+todayISO()+'.csv';a.click();
   URL.revokeObjectURL(a.href);
   toast('Export CSV généré — '+count+' prises, tous dossiers.');
 }
+
+/* ============ collecte journalière ============ */
 function collectDaily(n){
   const out=[];
   for(let i=n-1;i>=0;i--){
     const k=iso(addDays(new Date(),-i));
     const d=peekDay(k);if(!d)continue;
-    const ms=slotStats(d.morning),es=slotStats(d.evening);
+    const ms=d.morning?slotStats(d.morning):null;
+    const es=d.evening?slotStats(d.evening):null;
+    const gm=(d.morning&&d.morning.g!=='')?+d.morning.g:null;
+    const ge=(d.evening&&d.evening.g!=='')?+d.evening.g:null;
+    const hasBP=!!(ms||es);
+    const hasG=(gm!=null)||(ge!=null);
+    if(!hasBP&&!hasG)continue;
     const vals=[ms,es].filter(Boolean);
-    if(!vals.length)continue;
     const hrs=vals.map(v=>v.hr).filter(v=>v!=null);
     out.push({k,idx:n-1-i,
-      sys:Math.round(avg(vals.map(v=>v.sys))),
-      dia:Math.round(avg(vals.map(v=>v.dia))),
+      sys:vals.length?Math.round(avg(vals.map(v=>v.sys))):null,
+      dia:vals.length?Math.round(avg(vals.map(v=>v.dia))):null,
       hr:hrs.length?Math.round(avg(hrs)):null,
-      gm:d.morning.g!==''?+d.morning.g:null,
-      ge:d.evening.g!==''?+d.evening.g:null});
+      gm:gm,ge:ge});
   }
   return out;
 }
+
+/* ============ génération PDF ============ */
+/* neutralise les signes non pris en charge par les polices internes de jsPDF */
+const pdfTxt=s=>String(s).replace(/[’‘]/g,"'").replace(/[«»]/g,'"').replace(/[–—]/g,'-').replace(/≥/g,'>=').replace(/\u202F|\u00A0/g,' ');
+function loadJsPdf(cb){
+  if(window.jspdf&&window.jspdf.jsPDF){cb();return}
+  toast('Chargement du module PDF…');
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload=cb;
+  s.onerror=function(){
+    toast('Module PDF indisponible (hors ligne ?) — impression système de secours.','alert');
+    try{buildPrint();window.print()}catch(_){}
+  };
+  document.head.appendChild(s);
+}
+function generatePDF(){
+  loadJsPdf(function(){
+    try{buildPDF()}
+    catch(err){
+      if(window.showFatal)window.showFatal('PDF : '+err.message);
+      toast('Erreur pendant la génération du PDF.','alert');
+    }
+  });
+}
+function buildPDF(){
+  const jsPDF=window.jspdf.jsPDF;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const Wp=210,Mg=14,Rg=Wp-Mg*2;
+  const pat=cur();
+  const daily=collectDaily(30),w7=collectDaily(7);
+  const bpD=daily.filter(p=>p.sys!=null);
+  const mR=a=>a.length?(Math.round(avg(a.map(p=>p.sys)))+'/'+Math.round(avg(a.map(p=>p.dia)))+' mmHg'):'-';
+  const hr7=w7.map(p=>p.hr).filter(v=>v!=null);
+  const gm7=w7.map(p=>p.gm).filter(v=>v!=null);
+  const ge7=w7.map(p=>p.ge).filter(v=>v!=null);
+
+  let y=Mg+6;
+  doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(25);
+  doc.text(pdfTxt('Systole - carnet de '+pat.name),Mg,y);y+=6;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(100);
+  doc.text(pdfTxt('Édité le '+fmtLong(todayISO())+' - 30 derniers jours ('+daily.length+' jour(s) renseigné(s)) - glycémie : mmol/L (mg/dL)'),Mg,y);y+=3.5;
+  doc.setDrawColor(30);doc.setLineWidth(.7);doc.line(Mg,y,Wp-Mg,y);y+=6;
+
+  const stats=[
+    ['Tension - moyenne 7 jours',mR(w7.filter(p=>p.sys!=null))],
+    ['Tension - moyenne 30 jours',mR(bpD)]
+  ];
+  if(hr7.length)stats.push(['Pouls moyen (7 jours)',Math.round(avg(hr7))+' bpm']);
+  if(gm7.length)stats.push(['Glycémie moyenne matin (à jeun)',frN(avg(gm7)/18,1)+' mmol/L ('+frN(Math.round(avg(gm7)),0)+' mg/dL)']);
+  if(ge7.length)stats.push(['Glycémie moyenne soir',frN(avg(ge7)/18,1)+' mmol/L ('+frN(Math.round(avg(ge7)),0)+' mg/dL)']);
+  stats.forEach(st=>{
+    doc.setFontSize(9.5);doc.setTextColor(90);
+    doc.text(pdfTxt(st[0]+' :'),Mg,y);
+    doc.setTextColor(25);doc.setFont('helvetica','bold');
+    doc.text(pdfTxt(st[1]),Mg+64,y);
+    doc.setFont('helvetica','normal');
+    y+=5.4;
+  });
+  y+=3;
+
+  const heads=['Jour','Matin','Pouls','Soir','Pouls','Gly. matin (à jeun)','Gly. soir'];
+  const cols=[42,20,14,20,14,36,36];
+  function headRow(yy){
+    doc.setFillColor(34,42,53);doc.setTextColor(255);
+    doc.rect(Mg,yy,Rg,7.5,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(7.6);
+    let xx=Mg;
+    heads.forEach((h,i)=>{doc.text(pdfTxt(h),xx+2,yy+5);xx+=cols[i]});
+    doc.setFont('helvetica','normal');
+    return yy+7.5;
+  }
+  if(y>248){doc.addPage();y=Mg}
+  y=headRow(y);
+  if(!daily.length){
+    doc.setFontSize(9);doc.setTextColor(120);
+    doc.text('Aucune donnee sur la periode.',Mg+2,y+4.7);
+    y+=8;
+  }
+  daily.forEach((p,i)=>{
+    if(y+7>282){doc.addPage();y=Mg+2;y=headRow(y)}
+    if(i%2===1){doc.setFillColor(245,242,233);doc.rect(Mg,y,Rg,7,'F')}
+    const d=peekDay(p.k);
+    const ms=d&&d.morning?slotStats(d.morning):null;
+    const es=d&&d.evening?slotStats(d.evening):null;
+    const cells=[
+      fmtMed(p.k),
+      ms?ms.sys+'/'+ms.dia:'-',
+      (ms&&ms.hr!=null)?String(ms.hr):'-',
+      es?es.sys+'/'+es.dia:'-',
+      (es&&es.hr!=null)?String(es.hr):'-',
+      p.gm!=null?frN(p.gm/18,1)+' ('+Math.round(p.gm)+')':'-',
+      p.ge!=null?frN(p.ge/18,1)+' ('+Math.round(p.ge)+')':'-'
+    ];
+    doc.setFontSize(8.6);doc.setTextColor(25);
+    let xx=Mg;
+    cells.forEach((c,ci)=>{doc.text(pdfTxt(c),xx+2,y+4.7);xx+=cols[ci]});
+    doc.setDrawColor(226);doc.setLineWidth(.2);doc.line(Mg,y+7,Wp-Mg,y+7);
+    y+=7;
+  });
+  y+=5;
+  doc.setFontSize(8);doc.setTextColor(110);
+  const note='Repères : au domicile, une moyenne >= 135/85 mmHg évoque une hypertension ; à jeun, une glycémie >= 7,0 mmol/L (126 mg/dL) un diabète - à confirmer par votre médecin.';
+  doc.text(doc.splitTextToSize(pdfTxt(note),Rg),Mg,y);
+
+  const n=doc.internal.getNumberOfPages();
+  for(let i=1;i<=n;i++){
+    doc.setPage(i);
+    doc.setFontSize(8);doc.setTextColor(130);
+    doc.text(pdfTxt('Systole - '+pat.name),Mg,291);
+    doc.text('Page '+i+'/'+n,Wp-Mg,291,{align:'right'});
+  }
+  const safe=pdfTxt(pat.name).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase()||'patient';
+  doc.save('carnet-'+safe+'-'+todayISO()+'.pdf');
+  toast('PDF généré et téléchargé — '+daily.length+' jour(s).');
+}
+
+/* secours impression système (fallback si le module PDF ne se charge pas) */
 function buildPrint(){
   const daily=collectDaily(30),w7=collectDaily(7);
-  const mR=a=>a.length?`${Math.round(avg(a.map(p=>p.sys)))}/${Math.round(avg(a.map(p=>p.dia)))}`:'—';
+  const bpD=daily.filter(p=>p.sys!=null);
+  const mR=a=>a.length?(Math.round(avg(a.map(p=>p.sys)))+'/'+Math.round(avg(a.map(p=>p.dia)))):'—';
   const hr7=w7.map(p=>p.hr).filter(v=>v!=null);
+  const gm7=w7.map(p=>p.gm).filter(v=>v!=null);
+  const ge7=w7.map(p=>p.ge).filter(v=>v!=null);
   const rows=daily.map(p=>{
     const d=peekDay(p.k),ms=slotStats(d.morning),es=slotStats(d.evening);
-    const f=st=>st?`${st.sys}/${st.dia}`:'—';
+    const f=st=>st?(st.sys+'/'+st.dia):'—';
     const fp=st=>(st&&st.hr!=null)?st.hr:'—';
-    const fg=v=>v!=null?gShow(v):'—';
-    return `<tr><td>${fmtLong(p.k)}</td><td>${f(ms)}</td><td>${fp(ms)}</td><td>${f(es)}</td><td>${fp(es)}</td>
-      <td>${fg(p.gm)}</td><td>${fg(p.ge)}</td></tr>`;
+    const fg=v=>v!=null?dualPlain(v):'—';
+    return '<tr><td>'+fmtLong(p.k)+'</td><td>'+f(ms)+'</td><td>'+fp(ms)+'</td><td>'+f(es)+'</td><td>'+fp(es)+'</td>'+
+      '<td>'+fg(p.gm)+'</td><td>'+fg(p.ge)+'</td></tr>';
   }).join('');
-  $('#print-report').innerHTML=`
-    <h1>Systole — carnet de ${esc(cur().name)}</h1>
-    <p class="pr-sub">Édité le ${fmtLong(todayISO())} — 30 derniers jours (${daily.length} jour${daily.length>1?'s':''} renseigné${daily.length>1?'s':''}) · glycémie en ${gUnitLabel()}</p>
-    <div class="pr-stats">
-      <span>Moyenne 7 jours&nbsp;: <b>${mR(w7)}</b> mmHg</span>
-      <span>Moyenne 30 jours&nbsp;: <b>${mR(daily)}</b> mmHg</span>
-      ${hr7.length?`<span>Pouls moyen&nbsp;: <b>${Math.round(avg(hr7))}</b> bpm</span>`:''}
-    </div>
-    <table class="prt">
-      <thead><tr><th>Jour</th><th>Matin</th><th>Pouls</th><th>Soir</th><th>Pouls</th><th>Glycémie matin (à jeun)</th><th>Glycémie soir</th></tr></thead>
-      <tbody>${rows||'<tr><td colspan="7">Aucune donnée sur la période.</td></tr>'}</tbody>
-    </table>
-    <p class="pr-foot">Repères : au domicile, une moyenne ≥ 135/85 mmHg évoque une hypertension ; à jeun, une glycémie ≥ 126 mg/dL (7,0 mmol/L) un diabète, à confirmer médicalement.</p>`;
+  $('#print-report').innerHTML=
+    '<h1>Systole — carnet de '+esc(cur().name)+'</h1>'+
+    '<p class="pr-sub">Édité le '+fmtLong(todayISO())+' — 30 derniers jours ('+daily.length+' jour(s) renseigné(s)) · glycémie : mmol/L (mg/dL)</p>'+
+    '<div class="pr-stats">'+
+      '<span>Tension 7 j&nbsp;: <b>'+mR(w7)+'</b> mmHg</span>'+
+      '<span>Tension 30 j&nbsp;: <b>'+mR(bpD)+'</b> mmHg</span>'+
+      (hr7.length?('<span>Pouls moyen&nbsp;: <b>'+Math.round(avg(hr7))+'</b> bpm</span>'):'')+
+      (gm7.length?('<span>Gly moy. matin&nbsp;: <b>'+dualPlain(Math.round(avg(gm7)))+'</b></span>'):'')+
+      (ge7.length?('<span>Gly moy. soir&nbsp;: <b>'+dualPlain(Math.round(avg(ge7)))+'</b></span>'):'')+
+    '</div>'+
+    '<table class="prt">'+
+      '<thead><tr><th>Jour</th><th>Matin</th><th>Pouls</th><th>Soir</th><th>Pouls</th><th>Gly. matin (à jeun)</th><th>Gly. soir</th></tr></thead>'+
+      '<tbody>'+(rows||'<tr><td colspan="7">Aucune donnée sur la période.</td></tr>')+'</tbody>'+
+    '</table>'+
+    '<p class="pr-foot">Repères : au domicile, une moyenne ≥ 135/85 mmHg évoque une hypertension ; à jeun, une glycémie ≥ 7,0 mmol/L (126 mg/dL) un diabète, à confirmer médicalement.</p>';
 }
-function printReport(){buildPrint();window.print()}
 
 /* ============ courbes ============ */
 function makeChart(opts){
   const N=opts.N,pts=opts.pts,series=opts.series,th=opts.th||[];
-  const W=920,H=300,L=58,R=118,T=16,B=36,iw=W-L-R,ih=H-T-B;
+  if(!pts||!pts.length)return'';
+  const W=920,H=300,L=58,R=118,T=18,B=36,iw=W-L-R,ih=H-T-B;
   const vals=[];
   pts.forEach(p=>series.forEach(s=>{const v=s.get(p);if(v!=null)vals.push(v)}));
   if(!vals.length)return'';
-  let lo=Math.floor((Math.min(...vals)-7)/10)*10,hi=Math.ceil((Math.max(...vals)+7)/10)*10;
+  let lo=Math.floor((Math.min.apply(null,vals)-6)/10)*10;
+  let hi=Math.ceil((Math.max.apply(null,vals)+6)/10)*10;
+  if(lo===hi){lo-=10;hi+=10}
   if(opts.lo0!=null)lo=Math.max(lo,opts.lo0);
   if(opts.hi0!=null)hi=Math.min(hi,opts.hi0);
-  const X=i=>L+(N>1?i*(iw/(N-1)):iw/2);
+  const s1=N-1;
+  let s0=Math.max(0,Math.min(pts[0].idx-1,s1-7));
+  if(s1-s0<2)s0=Math.max(0,s1-2);
+  const X=i=>L+((i-s0)/(s1-s0))*iw;
   const Y=v=>T+ih*(1-(v-lo)/(hi-lo));
-  let s=`<svg viewBox="0 0 ${W} ${H}" class="chart" role="img">`;
-  const step=(hi-lo>120)?20:10;
+  let s='<svg viewBox="0 0 '+W+' '+H+'" class="chart" role="img">';
+  const span=hi-lo;
+  const step=(span>120)?20:(span>60)?10:(span>24)?5:2;
   for(let v=lo;v<=hi;v+=step){
     const y=Y(v).toFixed(1);
-    s+=`<line x1="${L}" y1="${y}" x2="${W-R}" y2="${y}" stroke="#E6DFCB" stroke-width="1"/>`;
-    s+=`<text x="${L-9}" y="${+y+3.5}" text-anchor="end" class="ax">${v}</text>`;
+    s+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="#E6DFCB" stroke-width="1"/>';
+    s+='<text x="'+(L-9)+'" y="'+(+y+3.5).toFixed(1)+'" text-anchor="end" class="ax">'+frN(v,step<2?1:0)+'</text>';
   }
   th.forEach(t=>{
-    const sv=t[0],col=t[1],lab=t[2];
+    const sv=t[0];
     if(sv<lo||sv>hi)return;
     const yy=Y(sv).toFixed(1);
-    s+=`<line x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}" stroke="${col}" stroke-width="1.3" stroke-dasharray="5 5" opacity=".55"/>`;
-    s+=`<text x="${W-R+8}" y="${+yy+3.5}" class="seui" fill="${col}">${lab}</text>`;
+    s+='<line x1="'+L+'" y1="'+yy+'" x2="'+(W-R)+'" y2="'+yy+'" stroke="'+t[1]+'" stroke-width="1.3" stroke-dasharray="5 5" opacity=".55"/>';
+    s+='<text x="'+(W-R+8)+'" y="'+(+yy+3.5).toFixed(1)+'" class="seui" fill="'+t[1]+'">'+t[2]+'</text>';
   });
-  const tick=Math.max(1,Math.round(N/6));
+  const hspan=s1-s0,tick=Math.max(1,Math.round(hspan/5));
   pts.forEach(p=>{
-    if(p.idx%tick===0||p===pts[pts.length-1])
-      s+=`<text x="${X(p.idx).toFixed(1)}" y="${H-12}" text-anchor="middle" class="ax">${fmtDay(p.k)}</text>`;
+    if((p.idx-s0)%tick===0||p===pts[pts.length-1])
+      s+='<text x="'+X(p.idx).toFixed(1)+'" y="'+(H-12)+'" text-anchor="middle" class="ax">'+fmtDay(p.k)+'</text>';
   });
   series.forEach(se=>{
-    let d='',prev=null;
+    const fmt=se.fmt||(v=>String(Math.round(v)));
+    let d='',prev=null,cnt=0;
     pts.forEach(p=>{
       const v=se.get(p);if(v==null)return;
-      const x=X(p.idx).toFixed(1),y=Y(v).toFixed(1);
-      d+=(prev!=null&&p.idx-prev<=2?' L ':' M ')+x+' '+y;
-      prev=p.idx;
+      const x=X(p.idx),y=Y(v);
+      d+=(prev!=null&&p.idx-prev<=2?(' L '+x.toFixed(1)+' '+y.toFixed(1)):(' M '+x.toFixed(1)+' '+y.toFixed(1)));
+      prev=p.idx;cnt++;
     });
-    s+=`<path d="${d}" fill="none" stroke="${se.color}" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"/>`;
-  });
-  pts.forEach(p=>{
-    const tip=`${p.sys}/${p.dia} mmHg${p.hr!=null?' · pouls '+p.hr:''}`;
-    series.forEach(se=>{
+    if(d)s+='<path d="'+d+'" fill="none" stroke="'+se.color+'" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"/>';
+    pts.forEach(p=>{
       const v=se.get(p);if(v==null)return;
-      const cx=X(p.idx).toFixed(1),cy=Y(v).toFixed(1);
-      s+=`<circle cx="${cx}" cy="${cy}" r="3.3" fill="${se.color}" stroke="#FCFAF3" stroke-width="1.4"/>`;
-      s+=`<circle cx="${cx}" cy="${cy}" r="12" fill="transparent" class="pt" data-d="${p.k}" data-v="${esc(tip)}"/>`;
+      const xv=X(p.idx),yv=Y(v);
+      const x=xv.toFixed(1),y=yv.toFixed(1);
+      const tipTxt=opts.tip?opts.tip(p):(p.sys+'/'+p.dia+' mmHg'+(p.hr!=null?(' · pouls '+p.hr):''));
+      s+='<circle cx="'+x+'" cy="'+y+'" r="3.3" fill="'+se.color+'" stroke="#FCFAF3" stroke-width="1.4"/>';
+      s+='<circle cx="'+x+'" cy="'+y+'" r="11" fill="transparent" class="pt" data-d="'+p.k+'" data-v="'+esc(tipTxt)+'"/>';
+      if(cnt<=20||p===pts[pts.length-1])
+        s+='<text x="'+x+'" y="'+(yv-8).toFixed(1)+'" text-anchor="middle" class="ptl" fill="'+se.color+'">'+fmt(v)+'</text>';
     });
   });
   return s+'</svg>';
 }
+/* courbe glycémie toujours tracée en mmol/L ; les mg restent dans gm/ge pour les infos-bulles */
 function gluChartSVG(pts){
-  const gp=pts.filter(p=>p.gm!=null||p.ge!=null);
+  const gp=pts.map(p=>({k:p.k,idx:p.idx,hr:p.hr,sys:p.sys,dia:p.dia,
+      gm:p.gm,ge:p.ge,
+      gmm:p.gm!=null?Math.round(p.gm/18*100)/100:null,
+      gee:p.ge!=null?Math.round(p.ge/18*100)/100:null}))
+    .filter(p=>p.gmm!=null||p.gee!=null);
+  if(!gp.length)return'';
   return makeChart({N:state.range,pts:gp,
-    series:[{get:p=>p.gm,color:'#3E4E85'},{get:p=>p.ge,color:'#7B8BC4'}],
-    th:[[100,'#A87F2E','à jeun '+gShow(100)],[126,'#B23A2A','seuil '+gShow(126)]],
-    lo0:40,hi0:400});
+    series:[{get:p=>p.gmm,color:'#3E4E85',fmt:v=>frN(v,1)},
+            {get:p=>p.gee,color:'#7B8BC4',fmt:v=>frN(v,1)}],
+    th:[[5.6,'#A87F2E','repère 5,6'],[7,'#B23A2A','seuil 7,0']],
+    lo0:2,hi0:25,
+    tip:p=>{
+      const q=[];
+      if(p.gm!=null)q.push('matin '+dualPlain(p.gm));
+      if(p.ge!=null)q.push('soir '+dualPlain(p.ge));
+      return q.join(' · ');
+    }});
+}
+function chartBlock(make,label,fallback){
+  try{
+    const svg=make();
+    return svg||fallback;
+  }catch(err){
+    if(window.showFatal)window.showFatal('Courbe « '+label+' » : '+err.message);
+    return '<div class="empty">'+icon('alert')+' La courbe « '+label+' » n’a pas pu être tracée — l’erreur est affichée en haut de page.</div>';
+  }
 }
 function renderCharts(){
-  const host=$('#view-charts'),N=state.range;
-  const daily=collectDaily(N);
-  const gPts=daily.filter(p=>p.gm!=null||p.ge!=null);
-  const rangeBtns=[14,30,90].map(r=>`<button type="button" data-r="${r}" class="${r===N?'on':''}">${r} j</button>`).join('');
-  const bpPart=daily.length>=2
-    ?`<div class="legend"><span><i class="sw sw-sys"></i>Systolique</span><span><i class="sw sw-dia"></i>Diastolique</span><span><i class="sw sw-seuil"></i>Seuil 135 / 85</span></div>
-      ${makeChart({N,pts:daily,lo0:40,hi0:210,
-        series:[{get:p=>p.sys,color:'#222A35'},{get:p=>p.dia,color:'#B23A2A'}],
-        th:[[135,'#B05F2C','HTA 135'],[85,'#B05F2C','HTA 85']]})}
-      <div class="stats-line">${bpStats(daily)}</div>`
-    :`<div class="empty">${icon('activity')} Au moins deux jours de mesures sont nécessaires pour dessiner une courbe. Revenez après vos prochaines prises.</div>`;
-  const gluPart=gPts.length>=1
-    ?`<div class="legend"><span><i class="sw" style="border-color:#3E4E85"></i>Matin · à jeun</span><span><i class="sw" style="border-color:#7B8BC4"></i>Soir</span></div>
-      ${gluChartSVG(daily)}`
-    :`<div class="empty">${icon('droplet')} Pas encore de glycémie enregistrée — notez-la chaque jour, à jeun le matin puis le soir, dans la fiche de saisie.</div>`;
-  host.innerHTML=`
-   <section class="chart-sec">
-     <div class="chart-head">
-       <div><h3>${esc(cur().name)} — tension artérielle</h3>
-       <p class="chart-sub">Moyennes journalières des prises du matin et du soir, sur les ${N} derniers jours.</p></div>
-       <div class="seg" id="rangeSeg">${rangeBtns}</div>
-     </div>
-     ${bpPart}
-   </section>
-   <section class="chart-sec">
-     <div class="chart-head"><div><h3>Glycémie</h3>
-       <p class="chart-sub">Contrôles du matin (à jeun) et du soir, en ${gUnitLabel()}.</p></div></div>
-     ${gluPart}
-   </section>`;
-  $('#rangeSeg').addEventListener('click',e=>{
-    const b=e.target.closest('button');if(!b)return;
-    state.range=+b.dataset.r;renderCharts();
-  });
-  const tip=$('#tip');
-  $$('#view-charts .pt').forEach(c=>{
-    c.addEventListener('mouseenter',()=>{
-      tip.innerHTML=`<div class="t-date">${fmtLong(c.dataset.d)}</div><div class="t-val">${c.dataset.v}</div>`;
-      tip.classList.add('show');
+  const host=$('#view-charts');
+  try{
+    const N=state.range;
+    const daily=collectDaily(N);
+    const bpDaily=daily.filter(p=>p.sys!=null&&p.dia!=null);
+    const gluDaily=daily.filter(p=>p.gm!=null||p.ge!=null);
+    const gmAll=gluDaily.map(p=>p.gm).filter(v=>v!=null);
+    const geAll=gluDaily.map(p=>p.ge).filter(v=>v!=null);
+    const rangeBtns=[14,30,90].map(r=>'<button type="button" data-r="'+r+'" class="'+(r===N?'on':'')+'">'+r+' j</button>').join('');
+    const bpPart=bpDaily.length>=1
+      ?'<div class="legend"><span><i class="sw sw-sys"></i>Systolique</span><span><i class="sw sw-dia"></i>Diastolique</span><span><i class="sw sw-seuil"></i>Seuil 135 / 85</span></div>'+
+       chartBlock(()=>makeChart({N:N,pts:bpDaily,lo0:40,hi0:210,
+          series:[{get:p=>p.sys,color:'#222A35'},{get:p=>p.dia,color:'#B23A2A'}],
+          th:[[135,'#B05F2C','HTA 135'],[85,'#B05F2C','HTA 85']]}),'tension',
+          '<div class="empty">'+icon('activity')+' Aucune donnée de tension à tracer.</div>')+
+       '<div class="stats-line">'+bpStats(bpDaily)+'</div>'
+      :'<div class="empty">'+icon('tensiometer')+' Aucune tension enregistrée pour le moment — saisissez une prise dans l’onglet Saisie et la courbe apparaîtra ici immédiatement.</div>';
+    const gluStats=[];
+    if(gmAll.length)gluStats.push('<span>moyenne matin <b>'+dualFull(Math.round(avg(gmAll)))+'</b></span>');
+    if(geAll.length)gluStats.push('<span>moyenne soir <b>'+dualFull(Math.round(avg(geAll)))+'</b></span>');
+    const gluPart=gluDaily.length>=1
+      ?'<div class="legend"><span><i class="sw" style="border-color:#3E4E85"></i>Matin · à jeun</span><span><i class="sw" style="border-color:#7B8BC4"></i>Soir</span></div>'+
+       chartBlock(()=>gluChartSVG(gluDaily),'glycémie',
+          '<div class="empty">'+icon('droplet')+' Aucune glycémie à tracer.</div>')+
+       '<div class="stats-line"><span><b>'+gluDaily.length+'</b> jour'+(gluDaily.length>1?'s':'')+' avec glycémie</span>'+gluStats.join('')+'</div>'
+      :'<div class="empty">'+icon('droplet')+' Aucune glycémie enregistrée pour le moment — notez-la chaque jour (à jeun le matin, puis le soir) dans la fiche de saisie ; elle suffira à elle seule à dessiner cette courbe.</div>';
+    host.innerHTML=
+     '<section class="chart-sec">'+
+       '<div class="chart-head">'+
+         '<div><h3>'+icon('tensiometer')+esc(cur().name)+' — tension artérielle</h3>'+
+         '<p class="chart-sub">Moyennes journalières (matin + soir) — <b>'+bpDaily.length+'</b> jour'+(bpDaily.length>1?'s':'')+' avec tension sur la fenêtre de '+N+' jours. Survolez un point pour le détail.</p></div>'+
+         '<div class="seg" id="rangeSeg">'+rangeBtns+'</div>'+
+       '</div>'+
+       bpPart+
+     '</section>'+
+     '<section class="chart-sec">'+
+       '<div class="chart-head"><div><h3 class="g-h">'+icon('droplet')+'Glycémie</h3>'+
+       '<p class="chart-sub">Courbe en mmol/L (repères 5,6 et 7,0) ; les infos-bulles ajoutent la conversion en mg/dL entre parenthèses — <b>'+gluDaily.length+'</b> jour'+(gluDaily.length>1?'s':'')+' avec glycémie.</p></div></div>'+
+       gluPart+
+     '</section>';
+    $('#rangeSeg').addEventListener('click',e=>{
+      const b=e.target.closest('button');if(!b)return;
+      state.range=+b.dataset.r;renderCharts();
     });
-    c.addEventListener('mousemove',e=>{tip.style.left=e.clientX+'px';tip.style.top=(e.clientY-8)+'px'});
-    c.addEventListener('mouseleave',()=>tip.classList.remove('show'));
-  });
+    const tip=$('#tip');
+    $$('#view-charts .pt').forEach(c=>{
+      c.addEventListener('mouseenter',()=>{
+        tip.innerHTML='<div class="t-date">'+fmtLong(c.dataset.d)+'</div><div class="t-val">'+c.dataset.v+'</div>';
+        tip.classList.add('show');
+      });
+      c.addEventListener('mousemove',e=>{tip.style.left=e.clientX+'px';tip.style.top=(e.clientY-8)+'px'});
+      c.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+    });
+  }catch(err){
+    host.innerHTML='<div class="empty">'+icon('alert')+' La vue Courbes n’a pas pu s’afficher — l’erreur est indiquée en haut de page.</div>';
+    if(window.showFatal)window.showFatal('Courbes : '+err.message);
+  }
 }
 function bpStats(pts){
+  if(!pts.length)return'';
   const hrs=pts.map(p=>p.hr).filter(v=>v!=null);
   const high=pts.filter(p=>p.sys>=135||p.dia>=85).length;
-  return `<span><b>${pts.length}</b> jours renseignés</span>
-    <span>moyenne <b>${Math.round(avg(pts.map(p=>p.sys)))}/${Math.round(avg(pts.map(p=>p.dia)))}</b> mmHg</span>
-    ${hrs.length?`<span>pouls moyen <b>${Math.round(avg(hrs))}</b> bpm</span>`:''}
-    <span><b>${high}</b> jour${high>1?'s':''} au-dessus de 135/85</span>`;
+  const n=pts.length;
+  return '<span><b>'+n+'</b> jour'+(n>1?'s':'')+' renseigné'+(n>1?'s':'')+'</span>'+
+    '<span>moyenne <b>'+Math.round(avg(pts.map(p=>p.sys)))+'/'+Math.round(avg(pts.map(p=>p.dia)))+'</b> mmHg</span>'+
+    (hrs.length?('<span>pouls moyen <b>'+Math.round(avg(hrs))+'</b> bpm</span>'):'')+
+    '<span><b>'+high+'</b> jour'+(high>1?'s':'')+' au-dessus de 135/85</span>';
 }
 
 /* ============ toasts / réglages ============ */
 function toast(msg,ic){
   const t=document.createElement('div');
   t.className='toast'+(ic==='alert'?' warn':'');
-  t.innerHTML=icon(ic==='alert'?'alert':(ic||'check'))+`<span>${msg}</span>`;
+  t.innerHTML=icon(ic==='alert'?'alert':(ic||'check'))+'<span>'+msg+'</span>';
   $('#toasts').appendChild(t);
   setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),260)},3400);
 }
 const closeModal=()=>{$('#modal-root').innerHTML='';$('#tip').classList.remove('show')};
 function openSettings(){
   const p=cur();
-  const JOURS=[];
   const rows=store.patients.map(pp=>{
     const col=PATS[pp.color%6],act=pp.id===store.active;
-    return `<div class="pat-row">
-      <span class="seal-mini" style="--pc:${col};background:${col}">${esc(initials(pp.name))}</span>
-      <span class="pat-name">${esc(pp.name)}${act?' <span class="you">— dossier actif</span>':''}</span>
-      <button class="icon-btn p-del" data-id="${pp.id}" data-armed="" ${store.patients.length<=1?'disabled title="Au moins un dossier doit rester"':'title="Supprimer ce dossier"'}>${icon('trash')}</button>
-    </div>`;
+    return '<div class="pat-row">'+
+      '<span class="seal-mini" style="background:'+col+'">'+esc(initials(pp.name))+'</span>'+
+      '<span class="pat-name">'+esc(pp.name)+(act?' <span class="you">— dossier actif</span>':'')+'</span>'+
+      '<button class="icon-btn p-del" data-id="'+pp.id+'" data-armed="" '+(store.patients.length<=1?'disabled title="Au moins un dossier doit rester"':'title="Supprimer ce dossier (double confirmation)"')+'>'+icon('trash')+'</button>'+
+    '</div>';
   }).join('');
-  $('#modal-root').innerHTML=`
-   <div class="overlay" id="ovl">
-    <div class="modal" role="dialog" aria-modal="true" aria-label="Réglages du carnet">
-      <header>Réglages <button class="icon-btn" id="mX" aria-label="Fermer">${icon('x')}</button></header>
-      <div class="m-body">
-        <div class="fld"><label for="fName">Nom du dossier actif <span>— figure sur les registres et impressions</span></label>
-          <input type="text" id="fName" value="${esc(p.name)}" placeholder="ex. Camille Durand" maxlength="60"></div>
-        <div class="fld"><label>Unité de glycémie <span>— pour ce dossier</span></label>
-          <div class="radio-row">
-            <label class="rad"><input type="radio" name="unit" value="mgdl" ${p.unit!=='mmol'?'checked':''}> mg/dL</label>
-            <label class="rad"><input type="radio" name="unit" value="mmol" ${p.unit==='mmol'?'checked':''}> mmol/L</label>
-          </div></div>
-        <div class="fld"><label>Dossiers patients <span>— ${store.patients.length} sur ${MAX_PAT} · ajoutez-en avec le bouton « Nouveau dossier » du bandeau</span></label>
-          ${rows}
-          <p class="hint">La suppression d’un dossier efface définitivement son carnet (double clic de confirmation).</p></div>
-        <div class="m-actions">
-          <button class="btn ghost" id="mExport">${icon('download')} Sauvegarde JSON <span style="letter-spacing:0;text-transform:none">— tous dossiers</span></button>
-          <button class="btn ghost" id="mImport">${icon('up')} Restaurer</button>
-          <input type="file" id="fImport" accept="application/json,.json" hidden>
-          <button class="btn danger" id="mWipe">${icon('trash')} Tout effacer</button>
-        </div>
-      </div>
-      <footer class="m-foot"><button class="btn" id="mOk">Fermer</button></footer>
-    </div>
-   </div>`;
+  $('#modal-root').innerHTML=
+   '<div class="overlay" id="ovl">'+
+    '<div class="modal" role="dialog" aria-modal="true" aria-label="Réglages">'+
+      '<header>Réglages <button class="icon-btn" id="mX" aria-label="Fermer">'+icon('x')+'</button></header>'+
+      '<div class="m-body">'+
+        '<div class="fld"><label for="fName">Nom du dossier actif <span>— figure sur les registres et les PDF</span></label>'+
+          '<input type="text" id="fName" value="'+esc(p.name)+'" placeholder="ex. Camille Durand" maxlength="60"></div>'+
+        '<div class="fld"><label>Unité de saisie de la glycémie <span>— l’affichage reste toujours mmol/L (mg/dL)</span></label>'+
+          '<div class="radio-row">'+
+            '<label class="rad"><input type="radio" name="unit" value="mgdl" '+(p.unit!=='mmol'?'checked':'')+'> mg/dL</label>'+
+            '<label class="rad"><input type="radio" name="unit" value="mmol" '+(p.unit==='mmol'?'checked':'')+'> mmol/L</label>'+
+          '</div></div>'+
+        '<div class="fld"><label>Dossiers patients <span>— '+store.patients.length+' sur '+MAX_PAT+' · ajoutez-en via « Nouveau dossier »</span></label>'+
+          rows+
+          '<p class="hint">La suppression d’un dossier efface définitivement son carnet (double clic de confirmation).</p></div>'+
+        '<div class="m-actions">'+
+          '<button class="btn ghost" id="mExport">'+icon('download')+' Sauvegarde JSON</button>'+
+          '<button class="btn ghost" id="mImport">'+icon('up')+' Restaurer</button>'+
+          '<input type="file" id="fImport" accept="application/json,.json" hidden>'+
+          '<button class="btn danger" id="mWipe">'+icon('trash')+' Tout effacer</button>'+
+        '</div>'+
+      '</div>'+
+      '<footer class="m-foot"><button class="btn" id="mOk">Fermer</button></footer>'+
+    '</div>'+
+   '</div>';
   $('#ovl').addEventListener('click',e=>{if(e.target.id==='ovl')closeModal()});
-  $('#mX').onclick=$('#mOk').onclick=closeModal;
-  $('#fName').addEventListener('input',e=>{
-    p.name=e.target.value;save();renderDossiers();
-  });
+  $('#mX').onclick=closeModal;
+  $('#mOk').onclick=closeModal;
+  $('#fName').addEventListener('input',e=>{p.name=e.target.value;save();renderDossiers()});
   $$('input[name=unit]').forEach(r=>r.addEventListener('change',e=>{
     p.unit=e.target.value;save();
     if(state.tab==='today'){renderSlot('morning');renderSlot('evening');renderGlucoFoot()}
     if(state.tab==='charts')renderCharts();
-    toast('Unité de glycémie du dossier : '+gUnitLabel()+'.');
+    toast('Unité de saisie du dossier : '+gUnitLabel()+' — affichage inchangé : mmol/L (mg/dL).');
   }));
   $$('.p-del').forEach(b=>{
     b.onclick=()=>{
@@ -1142,7 +1339,7 @@ window.Systole={openSettings,tab:switchTab};
 
 try{
   applyPatientTheme();
-  $('#seal').innerHTML=icon('heart');
+  $('#seal').innerHTML=icon('tensiometer');
   $('#mastheadDate').textContent=fmtLong(todayISO());
   switchTab('today');
 }catch(err){
