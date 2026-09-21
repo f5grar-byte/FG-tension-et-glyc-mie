@@ -1,0 +1,1769 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Systole — Carnets de tension & glycémie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F3EEE2; --surface:#FCFAF3; --surface-2:#F6F1E4;
+  --line:#D8CFB8; --line-soft:#E8E1CD;
+  --ink:#222A35; --ink-2:#5A6472; --faint:#9AA2AC;
+  --verm:#B23A2A; --gold:#9A7328; --night:#3E4E85;
+  --ok:#3E7A4E; --olive:#6E7F3C; --warn:#DD7A1F; --high:#B05F2C; --crit:#B23A2A; --crit2:#8C2430;
+  --pat:#B23A2A;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'Instrument Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:1;opacity:.05;mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E")}
+::selection{background:var(--ink);color:var(--surface)}
+button{font-family:var(--sans)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--verm);outline-offset:2px}
+.ic{width:17px;height:17px;flex:none}
+
+.fatal{display:none;background:var(--crit);color:#fff;font:12.5px/1.55 var(--mono);padding:10px 18px;position:relative;z-index:100}
+.fatal.show{display:block}
+
+.masthead{max-width:1080px;margin:0 auto;padding:30px 28px 0;display:flex;justify-content:space-between;align-items:flex-end;gap:18px;position:relative;z-index:2}
+.brand{display:flex;align-items:center;gap:16px}
+.seal{width:54px;height:54px;border:1.5px solid var(--ink);border-radius:50%;display:grid;place-items:center;position:relative;background:var(--surface)}
+.seal::before{content:'';position:absolute;inset:4px;border:1px solid var(--ink);opacity:.28;border-radius:50%}
+.seal .ic{width:26px;height:26px;color:var(--pat)}
+h1{font:600 42px/1 var(--serif);letter-spacing:-.01em}
+h1 i{font-style:normal;color:var(--pat)}
+.tagline{font:600 10px var(--sans);letter-spacing:.26em;text-transform:uppercase;color:var(--ink-2);margin-top:6px}
+.mast-right{display:flex;flex-direction:column;align-items:flex-end;gap:9px}
+.today-line{font:500 12px var(--mono);color:var(--ink-2)}
+
+.dossiers{max-width:1080px;margin:18px auto 0;padding:0 28px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;position:relative;z-index:2}
+.dossiers-label{font:600 10px var(--sans);letter-spacing:.24em;text-transform:uppercase;color:var(--ink-2);margin-right:6px}
+.chip{display:inline-flex;align-items:center;gap:9px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:5px 15px 5px 6px;cursor:pointer;font:600 12.5px var(--sans);color:var(--ink-2);transition:border-color .15s,color .15s}
+.chip:hover{border-color:var(--ink);color:var(--ink)}
+.chip .ic{width:13px;height:13px}
+.seal-mini{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font:600 9.5px var(--mono);color:#FCFAF3;flex:none}
+.chip.active{border-color:var(--pc);color:var(--ink)}
+.chip.active .seal-mini{outline:2px solid var(--pc);outline-offset:2px}
+.chip.add{padding:8px 15px;border-style:dashed;color:var(--ink-2)}
+.chip.add:hover{border-style:solid;border-color:var(--ink)}
+
+.btn{font:600 11.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;background:var(--ink);color:var(--surface);border:1px solid var(--ink);padding:9px 16px;border-radius:3px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .14s,background .14s,color .14s}
+.btn .ic{width:14px;height:14px}
+.btn:hover{background:#0d1219;transform:translateY(-1px)}
+.btn.ghost{background:transparent;color:var(--ink)}
+.btn.ghost:hover{background:var(--line-soft)}
+.btn.danger{background:transparent;color:var(--crit);border-color:var(--crit)}
+.btn.danger:hover,.btn.danger.armed{background:var(--crit);color:#fff}
+.nav-btn{width:36px;height:36px;border:1px solid var(--line);background:var(--surface);border-radius:50%;display:grid;place-items:center;cursor:pointer;color:var(--ink);transition:.14s}
+.nav-btn .ic{width:16px;height:16px}
+.nav-btn:hover:not(:disabled){border-color:var(--ink)}
+.nav-btn:disabled{opacity:.32;cursor:default}
+.link-btn{background:none;border:none;color:var(--ink-2);font:600 11px var(--sans);letter-spacing:.08em;text-transform:uppercase;text-decoration:underline dotted;cursor:pointer;padding:2px}
+.link-btn:hover{color:var(--ink)}
+.icon-btn{background:none;border:none;cursor:pointer;color:var(--ink-2);display:grid;place-items:center;padding:4px;border-radius:4px}
+.icon-btn:hover{color:var(--ink)}
+.icon-btn.armed{color:#fff;background:var(--crit)}
+.icon-btn:disabled{opacity:.3;cursor:default}
+
+.tabs{max-width:1080px;margin:12px auto 0;padding:0 28px;display:flex;gap:6px;position:relative;z-index:2}
+.tab{appearance:none;background:var(--paper);border:1px solid transparent;border-bottom:none;padding:10px 18px 11px;font:600 11.5px var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;border-radius:5px 5px 0 0;position:relative;top:1px;transition:color .15s}
+.tab:hover{color:var(--ink)}
+.tab.active{background:var(--surface);border-color:var(--ink);color:var(--ink);border-bottom:1px solid var(--surface)}
+
+.page{max-width:1080px;margin:0 auto;background:var(--surface);border:1px solid var(--ink);border-top:none;min-height:540px;position:relative;z-index:2;box-shadow:0 2px 0 rgba(34,42,53,.06)}
+.page::before{content:'';display:block;height:4px;background:var(--pat)}
+.site-foot{max-width:1080px;margin:0 auto;padding:18px 30px 48px;font:12.5px/1.6 var(--sans);color:var(--ink-2);position:relative;z-index:2}
+.site-foot p+p{margin-top:5px;font-style:italic;font-family:var(--serif)}
+
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 30px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.date-nav{display:flex;align-items:center;gap:14px}
+.date-big h2{font:600 24px var(--serif);letter-spacing:-.01em}
+.head-right{text-align:right;display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.now-hint{font:italic 14px/1.45 var(--serif);color:var(--ink-2);max-width:340px}
+
+.slot{padding:26px 30px 22px;position:relative}
+.slot::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold)}
+.slot.evening::before{background:var(--night)}
+.slot-head{display:flex;align-items:baseline;gap:11px;margin-bottom:18px;flex-wrap:wrap}
+.slot-head>.ic{width:18px;height:18px;align-self:center;color:var(--gold)}
+.slot.evening .slot-head>.ic{color:var(--night)}
+.slot-title{font:italic 600 20px var(--serif)}
+.slot-sub{font:600 10px var(--sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-2)}
+.slot-state{margin-left:auto;display:flex;align-items:center;gap:10px}
+.done-note{display:inline-flex;align-items:center;gap:6px;font:600 10.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ok)}
+.done-note .ic{width:13px;height:13px;color:var(--ok)}
+
+.slot-body{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:30px;align-items:start}
+table.meas{width:100%;border-collapse:collapse}
+.meas th{font:600 10px var(--sans);letter-spacing:.15em;text-transform:uppercase;color:var(--ink-2);text-align:left;padding:0 8px 8px 0;border-bottom:1.5px solid var(--ink)}
+.meas th em{font:500 9px var(--sans);font-style:normal;letter-spacing:.04em;text-transform:none;color:var(--faint);display:block;margin-top:2px}
+.meas td{padding:9px 8px 9px 0;border-bottom:1px solid var(--line-soft)}
+.meas td.rn{font:italic 500 17px var(--serif);color:var(--ink-2);width:36px}
+.avg-lbl{font:600 10px var(--mono)!important;color:var(--gold)!important;letter-spacing:.05em}
+tr.avg td{border-top:3px double var(--ink);border-bottom:none;padding-top:11px}
+.avg-cell{font:600 17px var(--mono);color:var(--ink)}
+
+table.gly{width:100%;border-collapse:collapse;margin-top:18px;padding-top:13px;border-top:1px dashed var(--line)}
+.gly-cap{font:600 10.5px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-top:18px;display:flex;align-items:center;gap:8px}
+.gly-cap .ic{width:14px;height:14px;color:var(--night)}
+.gly-cap em{font:italic 12px var(--serif);text-transform:none;letter-spacing:0;color:var(--ink-2)}
+.gly th{font:600 9.5px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);text-align:left;padding:8px 6px 7px 0;border-bottom:1.5px solid var(--ink)}
+.gly th em{font:500 9px var(--sans);font-style:normal;letter-spacing:.03em;text-transform:none;color:var(--faint);display:block;margin-top:2px}
+.gly td{padding:7px 6px 7px 0;border-bottom:1px solid var(--line-soft);vertical-align:middle}
+.gly td.rn{font:italic 500 15px var(--serif);color:var(--ink-2);width:26px}
+.gly td.gread{font:500 13px var(--mono);white-space:nowrap}
+.gly td.gread .mut{font-size:12px}
+.gly tfoot td{border-top:3px double var(--ink);border-bottom:none;padding-top:10px;font:500 13px var(--mono)}
+.gly tfoot .mut{font:italic 11.5px var(--serif)}
+.ctx-in{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:4px 5px;font:12px var(--sans);color:var(--ink);max-width:110px}
+.ctx-in:focus{outline:none;border-color:var(--ink)}
+
+.cell-in{font:500 18px var(--mono);width:76px;background:transparent;border:0;border-bottom:1.5px dashed var(--line);padding:2px 2px 3px;color:var(--ink);border-radius:0;transition:border-color .15s,background .15s}
+.cell-in:focus{outline:none;border-bottom:1.5px solid var(--verm);background:rgba(178,58,42,.045)}
+.cell-in.err{border-bottom:1.5px solid var(--crit);color:var(--crit)}
+.cell-in::placeholder{color:#CFC7B0}
+table.gly .cell-in{font-size:16px;width:64px}
+.slot-err{margin-top:9px;font:italic 13px var(--serif);color:var(--crit);min-height:18px}
+
+.alt{font:500 10.5px var(--mono);color:var(--faint);white-space:nowrap}
+
+.gauge-box{display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;padding-top:4px}
+.gauge-box svg{width:218px;height:218px;max-width:100%}
+.gt{font:500 9px var(--mono);fill:#8A8371}
+.gu{font:600 8.5px var(--sans);letter-spacing:.22em;text-transform:uppercase;fill:#A89F87}
+.g-rot{transition:transform 1.05s cubic-bezier(.3,1.25,.35,1);transform-box:view-box;transform-origin:50% 50%}
+.g-rot.sweep{transition:transform .48s cubic-bezier(.5,0,.55,1)}
+.gauge-val{font:600 27px var(--serif);letter-spacing:-.02em;margin-top:2px}
+.gauge-val small{font:500 12px var(--mono);color:var(--ink-2);letter-spacing:0}
+.gauge-pulse{font:500 12px var(--mono);color:var(--ink-2);display:inline-flex;align-items:center;gap:7px}
+.gauge-pulse .dot{margin-right:0}
+.gauge-badge{display:inline-flex;align-items:center;gap:6px;font:600 9px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-top:2px}
+.gauge-badge .ic{width:13px;height:13px;color:var(--pat)}
+.cat{display:inline-flex;align-items:center;gap:7px;font:600 10.5px var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:5px;min-height:14px}
+.cat::before{content:'';width:8px;height:8px;border-radius:50%;background:currentColor;flex:none}
+.cat.l-ok{color:var(--ok)}.cat.l-warn{color:var(--warn)}.cat.l-crit{color:var(--crit)}
+
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle;flex:none}
+.dot.solo{margin-right:0}
+
+.slot-rule{display:flex;align-items:center;gap:14px;padding:0 30px}
+.slot-rule::before,.slot-rule::after{content:'';flex:1;border-top:1px solid var(--line)}
+.slot-rule span{width:7px;height:7px;background:var(--ink);transform:rotate(45deg);opacity:.5}
+
+.lvl-note{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:11px 30px;border-bottom:1px solid var(--line-soft);font:12px var(--sans);color:var(--ink-2)}
+.lvl-note .dot{margin-right:4px}
+.lvl-note .mut{font-size:11.5px}
+.lvl-note.top{border-bottom:none;padding-bottom:0}
+
+.gluco-foot{padding:15px 30px 20px;border-top:1px solid var(--line);display:flex;gap:11px;align-items:center;color:var(--ink-2);font:italic 14.5px var(--serif);flex-wrap:wrap}
+.gluco-foot .ic{width:16px;height:16px;color:var(--night)}
+.gluco-foot b{font-weight:600;color:var(--ink);font-style:normal;font-family:var(--mono);font-size:13px}
+.gluco-foot .dot{margin:0 2px 0 6px}
+.gluco-foot .mut{font-size:12.5px;font-family:var(--mono);font-style:normal}
+
+.reg-toolbar{display:flex;align-items:center;gap:12px;padding:20px 30px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.reg-title{font:600 19px var(--serif);margin-right:auto}
+.reg-title .mut{font:600 12px var(--mono)}
+.reg-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.rng{display:inline-flex;align-items:center;gap:7px;font:600 10px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.rng input{background:var(--paper);border:1px solid var(--line);border-radius:3px;padding:6px 8px;font:12px var(--mono);color:var(--ink)}
+.rng input:focus{outline:none;border-color:var(--ink)}
+.reg-hint{padding:8px 30px 0;font:italic 12.5px var(--serif);color:var(--ink-2)}
+.reg-wrap{overflow-x:auto}
+table.reg{width:100%;border-collapse:collapse;min-width:920px}
+.reg th{font:600 10px var(--sans);letter-spacing:.13em;text-transform:uppercase;color:var(--ink-2);border-bottom:1px solid var(--line);padding:9px 12px;text-align:center;font-weight:600}
+.reg thead tr:first-child th{color:var(--ink);border-bottom:1px solid var(--line-soft);font-size:10.5px}
+.reg thead tr:first-child th:first-child,.reg thead tr:first-child th:last-child{color:var(--ink-2)}
+.reg th.tleft{text-align:left}
+.reg td{padding:11px 12px;border-bottom:1px solid var(--line-soft);font:500 13.5px var(--mono);text-align:center;white-space:nowrap}
+.reg td.day{font:500 13.5px var(--sans);text-align:left}
+.reg tbody tr{cursor:pointer;transition:background .12s}
+.reg tbody tr:hover{background:var(--surface-2)}
+.reg tbody tr.today-row{background:rgba(154,115,40,.07)}
+.reg b{font-weight:600}
+.reg .dot{margin-right:7px}
+.reg .xn{font:italic 10.5px var(--serif);color:var(--faint);margin-left:4px}
+.reg .gctx{display:block;font:italic 10.5px var(--serif);color:var(--ink-2);margin-top:2px;white-space:normal;line-height:1.3}
+.mut{color:var(--faint)}
+.you{font:italic 12px var(--serif);color:var(--gold)}
+.ic.done{width:14px;height:14px;color:var(--ok);vertical-align:-2px}
+.reg tfoot td{border-top:3px double var(--ink);border-bottom:none;font-weight:600;padding-top:12px}
+
+.chart-sec{padding:26px 30px;border-bottom:1px solid var(--line)}
+.chart-sec:last-child{border-bottom:none}
+.chart-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.chart-head h3{font:600 21px var(--serif)}
+.chart-head h3 .ic{width:19px;height:19px;vertical-align:-3px;margin-right:8px;color:var(--pat)}
+.chart-head h3.g-h .ic{color:var(--night)}
+.chart-sub{font:13px var(--sans);color:var(--ink-2);margin-top:4px;max-width:560px}
+.seg{display:inline-flex;border:1px solid var(--ink);border-radius:3px;overflow:hidden}
+.seg button{background:transparent;border:0;padding:8px 14px;font:600 11px var(--sans);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);cursor:pointer}
+.seg button+button{border-left:1px solid var(--ink)}
+.seg button.on{background:var(--ink);color:var(--surface)}
+.legend{display:flex;gap:20px;flex-wrap:wrap;margin:14px 0 2px}
+.legend span{display:inline-flex;align-items:center;font:600 10.5px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2)}
+.sw{display:inline-block;width:22px;height:0;margin-right:8px;border-top:2.5px solid}
+.sw-sys{border-color:var(--ink)}.sw-dia{border-color:var(--verm)}
+.sw-seuil{border-top-style:dashed;border-color:var(--warn)}
+.chart{width:100%;height:auto;display:block;margin-top:4px}
+.ax{font:500 10.5px var(--mono);fill:#98917C}
+.ptl{font:600 10px var(--mono);paint-order:stroke;stroke:#FCFAF3;stroke-width:3px;stroke-linejoin:round}
+.seui{font:600 10px var(--sans);letter-spacing:.05em}
+.pt{cursor:pointer}
+.stats-line{display:flex;flex-wrap:wrap;gap:8px 0;padding:16px 2px 0;font:13.5px var(--sans);color:var(--ink-2)}
+.stats-line>span+span::before{content:'·';margin:0 13px;color:var(--line)}
+.stats-line b{font:600 14px var(--mono);color:var(--ink)}
+.stats-line .dot{margin-right:6px}
+.empty{display:flex;gap:11px;align-items:center;padding:26px 2px;color:var(--ink-2);font:italic 15.5px var(--serif)}
+.empty .ic{width:20px;height:20px;color:var(--faint)}
+
+#tip{position:fixed;z-index:80;pointer-events:none;background:var(--ink);color:var(--surface);padding:9px 12px;border-radius:4px;opacity:0;transform:translate(-50%,calc(-100% - 12px));transition:opacity .13s;white-space:nowrap}
+#tip.show{opacity:1}
+#tip .t-date{font:italic 11.5px var(--serif);opacity:.72}
+#tip .t-val{font:600 13px var(--mono);margin-top:3px}
+#toasts{position:fixed;right:22px;bottom:22px;z-index:90;display:flex;flex-direction:column;gap:9px}
+.toast{display:flex;gap:11px;align-items:center;background:var(--ink);color:var(--surface);padding:12px 17px;border-radius:4px;font:13.5px var(--sans);box-shadow:0 8px 24px rgba(20,25,32,.25);animation:tin .25s ease;max-width:430px}
+.toast .ic{width:16px;height:16px;color:#9CC5A5;flex:none}
+.toast.warn .ic{color:#E5A493}
+.toast.out{animation:tout .26s forwards}
+@keyframes tin{from{opacity:0;transform:translateY(9px)}}
+@keyframes tout{to{opacity:0;transform:translateY(7px)}}
+.overlay{position:fixed;inset:0;background:rgba(28,32,40,.45);display:grid;place-items:center;z-index:70;padding:20px;animation:fade .18s}
+@keyframes fade{from{opacity:0}}
+.modal{background:var(--surface);border:1px solid var(--ink);width:520px;max-width:100%;max-height:92vh;overflow:auto;animation:pop .2s ease}
+@keyframes pop{from{opacity:0;transform:translateY(10px)}}
+.modal header{display:flex;justify-content:space-between;align-items:center;padding:16px 22px;border-bottom:1px solid var(--line);font:600 19px var(--serif)}
+.modal p.body{font:14.5px/1.6 var(--sans);color:var(--ink)}
+.m-body{padding:22px;display:grid;gap:20px}
+.fld label{display:block;font:600 10.5px var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ink-2);margin-bottom:8px}
+.fld label span{text-transform:none;letter-spacing:0;font-weight:400}
+.fld input[type=text],.fld select{width:100%;background:var(--paper);border:1px solid var(--line);padding:10px 12px;font:14.5px var(--sans);color:var(--ink);border-radius:3px}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--ink)}
+.hint{font:italic 12.5px var(--serif);color:var(--ink-2);margin-top:7px}
+.radio-row{display:flex;gap:20px;font:14.5px var(--sans)}
+.rad{display:inline-flex!important;align-items:center;gap:8px;letter-spacing:0!important;text-transform:none!important;color:var(--ink)!important;cursor:pointer}
+.pat-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line-soft)}
+.pat-row:last-child{border-bottom:none}
+.pat-name{font:600 14px var(--sans);margin-right:auto}
+.m-actions{display:flex;gap:8px;flex-wrap:wrap;padding-top:16px;border-top:1px dashed var(--line)}
+.m-foot{padding:14px 22px 18px;display:flex;justify-content:flex-end}
+.choice{display:grid;gap:7px}
+.choice .btn{width:100%;justify-content:flex-start}
+.choice .hint{margin:0 0 4px}
+
+#print-report{display:none}
+@media print{
+  body>*:not(#print-report){display:none!important}
+  body::before{display:none}
+  #print-report{display:block;font-family:var(--sans);color:#111;padding:6px}
+  #print-report h1{font:600 22px var(--serif);margin-bottom:3px}
+  .pr-sub{font:12px;color:#555;margin-bottom:14px}
+  .pr-stats{display:flex;gap:26px;flex-wrap:wrap;font:12.5px;margin-bottom:15px;padding:10px 0;border-top:2px solid #111;border-bottom:1px solid #999}
+  .pr-stats b{font:600 14px var(--mono)}
+  .prt{width:100%;border-collapse:collapse;font:11.5px var(--mono)}
+  .prt th{font:600 9.5px var(--sans);text-transform:uppercase;letter-spacing:.08em;text-align:left;border-bottom:1.5px solid #111;padding:5px 6px}
+  .prt td{border-bottom:.5px solid #ccc;padding:4.5px 6px}
+  .pr-foot{margin-top:13px;font:italic 11px var(--serif);color:#555}
+  @page{margin:13mm}
+}
+
+@media(max-width:920px){
+  .slot-body{grid-template-columns:1fr}
+  .gauge-box{order:2;padding-top:10px}
+  .gauge-box svg{width:196px;height:196px}
+}
+@media(max-width:700px){
+  .masthead{flex-direction:column;align-items:flex-start;gap:12px}
+  .mast-right{align-items:flex-start}
+  .sheet-head{flex-direction:column;align-items:flex-start}
+  .head-right{text-align:left;align-items:flex-start}
+  .now-hint{max-width:none}
+  h1{font-size:34px}
+}
+@media(max-width:560px){
+  .tabs,.masthead,.dossiers{padding-left:16px;padding-right:16px}
+  .slot,.sheet-head,.reg-toolbar,.chart-sec,.gluco-foot,.slot-rule,.lvl-note,.reg-hint{padding-left:16px;padding-right:16px}
+  .meas th{font-size:8.5px;letter-spacing:.08em}
+  .cell-in{width:56px;font-size:16px}
+  table.gly .cell-in{width:52px;font-size:15px}
+  .ctx-in{max-width:96px;font-size:11px}
+  .date-big h2{font-size:19px}
+}
+</style>
+</head>
+<body>
+
+<div id="fatal" class="fatal" role="alert"></div>
+<noscript><div class="fatal show">JavaScript est désactivé dans votre navigateur — cette application a besoin de JavaScript pour fonctionner.</div></noscript>
+
+<header class="masthead">
+  <div class="brand">
+    <div class="seal" id="seal"></div>
+    <div>
+      <h1>Systole<i>.</i></h1>
+      <p class="tagline">Carnets de suivi · tension &amp; glycémie</p>
+    </div>
+  </div>
+  <div class="mast-right">
+    <p class="today-line" id="mastheadDate"></p>
+    <button class="btn ghost" id="btnSettings" type="button">Réglages</button>
+  </div>
+</header>
+
+<div class="dossiers" id="dossiers"></div>
+
+<nav class="tabs">
+  <button class="tab active" data-tab="today" type="button">Saisie</button>
+  <button class="tab" data-tab="register" type="button">Registre</button>
+  <button class="tab" data-tab="charts" type="button">Courbes</button>
+</nav>
+
+<main class="page">
+  <section id="view-today"></section>
+  <section id="view-register" hidden></section>
+  <section id="view-charts" hidden></section>
+</main>
+
+<footer class="site-foot">
+  <p>Chaque patient possède son propre carnet. Dans le Registre, les dates « Du … au … » pilotent à la fois <b>l'affichage à l'écran</b> et le rapport PDF. Jusqu'à 3 glycémies par prise, avec contexte : à jeun / avant repas — 6,1 puis 7,0 mmol/L (110/126 mg/dL) ; après repas — 7,8 puis 11,1 mmol/L (140/200 mg/dL).</p>
+  <p>Repères (OMS / recommandations françaises) : au domicile, une tension moyenne ≥ 135/85 mmHg évoque une hypertension ; à jeun, une glycémie ≥ 7,0 mmol/L (126 mg/dL) évoque un diabète — à confirmer par votre médecin. Vos données restent sur cet appareil.</p>
+</footer>
+
+<div id="toasts"></div>
+<div id="modal-root"></div>
+<div id="tip"></div>
+<div id="print-report"></div>
+
+<script>
+/* ============ SCRIPT DE SURVEILLANCE (indépendant du principal) ============ */
+(function(){
+  window.showFatal=function(msg){
+    var f=document.getElementById('fatal');if(!f)return;
+    f.textContent='⚠ '+msg;
+    f.className='fatal show';
+  };
+  window.addEventListener('error',function(e){
+    window.showFatal((e&&e.message)?('Erreur : '+e.message):'Erreur inconnue.');
+  });
+  document.addEventListener('click',function(e){
+    var t=e.target;
+    if(!t||!t.closest)return;
+    var st=t.closest('#btnSettings');
+    var tb=t.closest('.tab');
+    if(!st&&!tb)return;
+    if(window.Systole){
+      if(st)window.Systole.openSettings();
+      else window.Systole.tab(tb.getAttribute('data-tab'));
+    }else{
+      window.showFatal("Le script principal ne s'est pas chargé — vérifiez que le code a été copié EN ENTIER (de <!DOCTYPE html> à </html>) et enregistré en .html.");
+    }
+  });
+  window.addEventListener('load',function(){
+    setTimeout(function(){
+      if(!window.Systole)window.showFatal("Le script principal ne s'est pas chargé — vérifiez que le code a été copié EN ENTIER et enregistré en .html (UTF-8).");
+    },400);
+  });
+})();
+</script>
+
+<script>
+'use strict';
+/* ============ outils ============ */
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const pad=n=>String(n).padStart(2,'0');
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const iso=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const fromISO=s=>{const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2])};
+const todayISO=()=>iso(new Date());
+const addDays=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const startOfWeek=d=>{const x=new Date(d);x.setDate(x.getDate()-((x.getDay()+6)%7));x.setHours(0,0,0,0);return x};
+const FR={
+  long:new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'}),
+  med:new Intl.DateTimeFormat('fr-FR',{weekday:'long',day:'numeric',month:'long'}),
+  hm:new Intl.DateTimeFormat('fr-FR',{hour:'2-digit',minute:'2-digit'})};
+const fmtLong=s=>cap(FR.long.format(fromISO(s)));
+const fmtMed=s=>cap(FR.med.format(fromISO(s)));
+const fmtDay=s=>cap(new Intl.DateTimeFormat('fr-FR',{weekday:'short',day:'numeric',month:'short'}).format(fromISO(s)));
+const frN=(v,dec=0)=>v.toLocaleString('fr-FR',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+const avg=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+const initials=name=>{const w=String(name||'').trim().split(/\s+/).filter(Boolean);if(!w.length)return'—';return (w.length>1?w[0][0]+w[1][0]:w[0].slice(0,2)).toUpperCase()};
+
+/* ============ icônes ============ */
+const ICONS={
+ sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+ moon:'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+ tensiometer:'<circle cx="6.5" cy="6.5" r="3.5"/><path d="M6.5 6.5l1.6-1.4"/><path d="M6.5 10v2.5a3 3 0 0 0 3 3H10"/><rect x="10" y="12.5" width="11" height="8.5" rx="2"/><path d="M13.5 12.5V10h4v2.5"/>',
+ pen:'<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/>',
+ file:'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/>',
+ share:'<path d="M12 3v12"/><path d="m8 7 4-4 4 4"/><path d="M8 11H7a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/>',
+ activity:'<path d="M22 12h-4l-3 9L9 3l-3 9H2"/>',
+ check:'<path d="M20 6 9 17l-5-5"/>',
+ x:'<path d="M18 6 6 18M6 6l12 12"/>',
+ plus:'<path d="M12 5v14M5 12h14"/>',
+ chevL:'<path d="m15 18-6-6 6-6"/>',
+ chevR:'<path d="m9 18 6-6-6-6"/>',
+ droplet:'<path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/>',
+ download:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/><path d="M12 15V3"/>',
+ up:'<path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m17 8-5-5-5 5"/><path d="M12 3v12"/>',
+ calendar:'<rect x="3" y="5" width="18" height="16" rx="1"/><path d="M16 3v4M8 3v4M3 10h18"/>',
+ alert:'<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
+ trash:'<path d="M3 6h18M8 6V4a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1v2M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>'};
+const icon=(n,cls='')=>`<svg class="ic ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||''}</svg>`;
+
+/* ============ glycémie : contextes & seuils ============ */
+const GLY_CTX={fast:'à jeun',pre:'avant repas',post:'après repas'};
+const GLY_CTXS={fast:'jeun',pre:'av.rep.',post:'post'};
+const GLY_TH={
+ fast:{low:70,warn:110,crit:126},
+ pre:{low:70,warn:110,crit:126},
+ post:{low:70,warn:140,crit:200}};
+function glyLevelCtx(mg,ctx){
+  const th=GLY_TH[ctx]||GLY_TH.fast;
+  if(mg<th.low)return'crit';
+  if(mg<th.warn)return'ok';
+  if(mg<th.crit)return'warn';
+  return'crit';
+}
+function glyInfoCtx(mg,ctx){
+  const th=GLY_TH[ctx]||GLY_TH.fast;
+  if(mg<th.low)return{l:'Trop basse',k:'l-crit',c:LEV.crit.c};
+  if(mg<th.warn)return{l:'Normale',k:'l-ok',c:LEV.ok.c};
+  if(mg<th.crit)return{l:'Élevée',k:'l-warn',c:LEV.warn.c};
+  return{l:'Très élevée',k:'l-crit',c:LEV.crit.c};
+}
+
+/* ============ niveaux & pastilles ============ */
+const LEV={
+ ok:{c:'#3E7A4E'},
+ warn:{c:'#DD7A1F'},
+ crit:{c:'#B23A2A'}};
+const dotHTML=(lv,solo)=>lv?'<span class="dot'+(solo?' solo':'')+'" style="background:'+LEV[lv].c+'"></span>':'';
+function bpLevel(sys,dia){
+  if(sys>=150||dia>=95)return'crit';
+  if(sys>=135||dia>=85)return'warn';
+  return'ok';
+}
+function pulseLevel(hr){
+  if(hr==null)return null;
+  if(hr<50||hr>110)return'crit';
+  if(hr>90)return'warn';
+  return'ok';
+}
+function bpInfo(sys,dia){
+  const lv=bpLevel(sys,dia);
+  return{k:'l-'+lv,c:LEV[lv].c,l:lv==='ok'?'Normale':(lv==='warn'?'Élevée':'Très élevée')};
+}
+const legendDots=()=>dotHTML('ok')+'<span>normale</span> '+dotHTML('warn')+'<span>élevée</span> '+dotHTML('crit')+'<span>très élevée</span>';
+const legendThresholds=()=>'Seuils — tension : 135/85 puis 150/95 mmHg · glycémie à jeun et avant repas : 6,1 (110 mg/dL) puis 7,0 mmol/L (126) · après repas : 7,8 (140) puis 11,1 mmol/L (200) · &lt; 3,9 (70) = trop bas · pouls : 90 puis 110 bpm.';
+
+/* ============ enregistrement & partage de fichiers ============ */
+function browserKind(){
+  const ua=navigator.userAgent||'';
+  const ios=/iPad|iPhone|iPod/.test(ua)||(/Macintosh/.test(ua)&&navigator.maxTouchPoints>1);
+  if(ios)return'ios';
+  if(/Android/i.test(ua))return'android';
+  if(/Firefox\//i.test(ua))return'firefox';
+  if(/Safari\//i.test(ua)&&!/Chrome|Chromium|Edg|OPR/.test(ua))return'safari';
+  if(/Edg\//i.test(ua))return'edge';
+  if(/OPR\//i.test(ua))return'opera';
+  if(/Chrome\//i.test(ua))return'chrome';
+  return'autre';
+}
+function canShareFile(blob,name,mime){
+  try{return !!(navigator.canShare&&navigator.canShare({files:[new File([blob],name,{type:mime})]}))}
+  catch(_){return false}
+}
+async function doShare(blob,name,mime){
+  try{
+    await navigator.share({files:[new File([blob],name,{type:mime})],title:name});
+    return'shared';
+  }catch(err){
+    if(err&&err.name==='AbortError')return'cancel';
+    return'error';
+  }
+}
+function saveCapabilityNote(){
+  if(window.showSaveFilePicker)
+    return'✓ Enregistrement : votre navigateur ouvre la boîte « Enregistrer sous » — vous choisirez le dossier et le nom du fichier.';
+  const bk=browserKind();
+  if(bk==='safari')
+    return'✗ Safari (Mac) : à chaque enregistrement, une fenêtre propose le choix — « Partager… » ouvre la feuille native macOS (Mail, AirDrop, Notes, Enregistrer dans Fichiers…), « Aperçu dans un onglet » permet ensuite Cmd+S (Fichier → Enregistrer sous), ou téléchargement direct (icône ⤓).';
+  if(bk==='firefox')
+    return'✗ Firefox : Réglages → Général → Fichiers → cochez « Toujours demander où enregistrer les fichiers » pour choisir l’emplacement.';
+  if(bk==='ios')
+    return'✗ Sur iPhone/iPad : la feuille de partage s’ouvre — choisissez « Enregistrer dans Fichiers » puis le dossier.';
+  if(bk==='android')
+    return'✗ Sur Android : la feuille de partage s’ouvre — choisissez « Fichiers » puis le dossier.';
+  return'✗ Votre navigateur n’ouvre pas la boîte « Enregistrer sous » — utilisez Chrome ou Edge sur ordinateur.';
+}
+function saveFallbackTip(){
+  const bk=browserKind();
+  if(bk==='safari')return'Safari : utilisez « Partager… » ou l’aperçu + Cmd+S ; l’icône ⤓ liste les téléchargements.';
+  if(bk==='firefox')return'Firefox : Réglages → Général → Fichiers → « Toujours demander où enregistrer les fichiers ».';
+  return'Pour choisir le dossier à chaque fois : Chrome ou Edge sur ordinateur.';
+}
+function reportSave(res,label){
+  if(res==='picker')toast(label+' — enregistré à l’emplacement choisi.');
+  else if(res==='shared')toast(label+' — partagé. Emplacement choisi dans la feuille de partage.');
+  else if(res==='tab')toast(label+' — aperçu ouvert dans un onglet : Cmd+S (Fichier → Enregistrer sous) pour choisir le dossier et le nom.',undefined,9000);
+  else if(res==='defer')/* géré par la fenêtre de secours */;
+  else if(res==='cancel')toast(label+' — enregistrement annulé.','x');
+  else toast(label+' — téléchargé dans votre dossier habituel. '+saveFallbackTip(),'alert',9000);
+}
+function showSaveChoice(blob,name,mime){
+  return new Promise(resolve=>{
+    const can=canShareFile(blob,name,mime);
+    $('#modal-root').innerHTML=
+     '<div class="overlay" id="ovlS">'+
+      '<div class="modal" role="dialog" aria-modal="true" aria-label="Choix d’enregistrement">'+
+       '<header>Enregistrer <button class="icon-btn" id="sX" aria-label="Fermer">'+icon('x')+'</button></header>'+
+       '<div class="m-body">'+
+        '<p class="body">Fichier : <b>'+esc(name)+'</b> — choisissez comment le récupérer :</p>'+
+        '<div class="choice">'+
+         '<button class="btn" id="sShare" '+(can?'':'disabled title="Partage de fichiers indisponible dans cette version"')+'>'+icon('share')+' Partager…</button>'+
+         '<p class="hint">'+(can?'Ouvre la feuille de partage native : Mail, AirDrop, Notes, Enregistrer dans Fichiers…':'Le partage de fichiers n’est pas disponible dans cette version — utilisez l’aperçu ci-dessous.')+'</p>'+
+         '<button class="btn ghost" id="sPrev">'+icon('file')+' Aperçu dans un onglet</button>'+
+         '<p class="hint">Puis Cmd+S (menu Fichier → Enregistrer sous) pour choisir le dossier et le nom.</p>'+
+         '<button class="btn ghost" id="sDl">'+icon('download')+' Téléchargement direct</button>'+
+         '<p class="hint">Si Safari le bloque, retrouvez vos téléchargements via l’icône ⤓ de la barre d’outils.</p>'+
+        '</div>'+
+       '</div>'+
+       '<footer class="m-foot"><button class="btn ghost" id="sCancel">Annuler</button></footer>'+
+      '</div>'+
+     '</div>';
+    let doneFlag=false;
+    const done=v=>{if(doneFlag)return;doneFlag=true;$('#modal-root').innerHTML='';document.removeEventListener('keydown',onKey);resolve(v)};
+    const url=URL.createObjectURL(blob);
+    const openTab=()=>{
+      let w=null;try{w=window.open(url,'_blank')}catch(_){w=null}
+      if(w)setTimeout(()=>{try{URL.revokeObjectURL(url)}catch(_){}},120000);
+      return !!w;
+    };
+    const onKey=e=>{if(e.key==='Escape')done('cancel')};
+    document.addEventListener('keydown',onKey);
+    $('#ovlS').addEventListener('click',e=>{if(e.target.id==='ovlS')done('cancel')});
+    $('#sX').onclick=()=>done('cancel');
+    $('#sCancel').onclick=()=>done('cancel');
+    $('#sShare').onclick=async()=>{
+      const r=await doShare(blob,name,mime);
+      if(r==='error')toast('Partage refusé par le navigateur — cliquez à nouveau sur « Partager… ».','alert');
+      else done(r);
+    };
+    $('#sPrev').onclick=()=>{
+      if(openTab())done('tab');
+      else{
+        $('#modal-root').innerHTML='<div class="overlay" id="ovlO"><div class="modal"><header>Fichier prêt</header><div class="m-body"><p class="body">Le navigateur a bloqué l’ouverture automatique. Cliquez ci-dessous : l’aperçu s’ouvrira dans un onglet, puis <b>Cmd+S</b> pour choisir le dossier.</p><div class="m-actions"><button class="btn" id="oGo">'+icon('file')+' Ouvrir l’aperçu</button></div></div><footer class="m-foot"><button class="btn ghost" id="oBack">Retour</button></footer></div></div>';
+        $('#oGo').onclick=()=>{window.open(url,'_blank');setTimeout(()=>{try{URL.revokeObjectURL(url)}catch(_){}},120000);done('tab')};
+        $('#oBack').onclick=()=>done('cancel');
+      }
+    };
+    $('#sDl').onclick=()=>{
+      try{
+        const a=document.createElement('a');
+        a.href=url;a.download=name;
+        document.body.appendChild(a);a.click();a.remove();
+        setTimeout(()=>{try{URL.revokeObjectURL(url)}catch(_){}},1500);
+        done('download');
+      }catch(_){done('download')}
+    };
+  });
+}
+async function saveFile(blob,suggestedName,desc,mime,ext){
+  if(window.showSaveFilePicker){
+    try{
+      const h=await window.showSaveFilePicker({
+        suggestedName:suggestedName,
+        startIn:'documents',
+        types:[{description:desc,accept:{[mime]:[ext]}}]
+      });
+      const w=await h.createWritable();
+      await w.write(blob);
+      await w.close();
+      return'picker';
+    }catch(err){
+      if(err&&err.name==='AbortError')return'cancel';
+    }
+  }
+  const bk=browserKind();
+  if((bk==='ios'||bk==='android')&&canShareFile(blob,suggestedName,mime)){
+    const r=await doShare(blob,suggestedName,mime);
+    if(r!=='error')return r;
+  }
+  if(bk==='safari')return await showSaveChoice(blob,suggestedName,mime);
+  try{
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(blob);
+    a.download=suggestedName;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>{try{URL.revokeObjectURL(a.href)}catch(_){}},1500);
+  }catch(_){}
+  return'download';
+}
+async function shareBlob(blob,name,mime,label){
+  if(!canShareFile(blob,name,mime)){
+    toast('Le partage de fichiers n’est pas disponible dans ce navigateur — utilisez la sauvegarde classique.','alert',7000);
+    return;
+  }
+  const r=await doShare(blob,name,mime);
+  if(r==='shared')toast(label+' — partagé. Destination choisie dans la feuille de partage.');
+  else if(r==='cancel')toast(label+' — partage annulé.','x');
+  else toast('Partage refusé — cliquez à nouveau sur « Partager ».','alert');
+}
+
+/* ============ dossiers patients & migration ============ */
+const MAX_PAT=6;
+const PATS=['#B23A2A','#3E4E85','#6E7F3C','#7C4A66','#2E6E6A','#9A7328'];
+const LS='systole.v2';
+function makePatient(name,colorIdx,unit){
+  return{id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),
+         name:name,unit:(unit==='mmol'?'mmol':'mgdl'),color:(colorIdx||0)%6,days:{}};
+}
+function migSlot(sl){
+  if(!sl||typeof sl!=='object')return;
+  if(!Array.isArray(sl.gs)){
+    sl.gs=[{v:(typeof sl.g==='string'&&sl.g!=='')?sl.g:'',c:'fast'},
+           {v:'',c:'pre'},
+           {v:'',c:'post'}];
+    delete sl.g;
+  }
+  while(sl.gs.length<3)sl.gs.push({v:'',c:'post'});
+}
+function normalizeStore(raw){
+  const patients=raw.patients.map((p,i)=>{
+    const days=(p.days&&typeof p.days==='object')?p.days:{};
+    Object.values(days).forEach(d=>{migSlot(d.morning);migSlot(d.evening)});
+    return{
+      id:String(p.id||('p'+i)),
+      name:String(p.name||('Patient '+(i+1))),
+      unit:p.unit==='mmol'?'mmol':'mgdl',
+      color:isFinite(p.color)?p.color%6:i%6,
+      days:days
+    };
+  });
+  let active=String(raw.active||'');
+  if(!patients.some(p=>p.id===active))active=patients[0].id;
+  return{active,patients};
+}
+function loadStore(){
+  let raw=null;
+  try{raw=JSON.parse(localStorage.getItem(LS))}catch(_){}
+  if(raw&&Array.isArray(raw.patients)&&raw.patients.length)return normalizeStore(raw);
+  let old=null;
+  try{old=JSON.parse(localStorage.getItem('systole.v1'))}catch(_){}
+  if(old&&old.days&&typeof old.days==='object'&&Object.keys(old.days).length){
+    const p=makePatient((old.settings&&old.settings.name)||'Patient 1',0,(old.settings&&old.settings.unit)||'mgdl');
+    p.days=old.days;
+    Object.values(p.days).forEach(d=>{migSlot(d.morning);migSlot(d.evening)});
+    return{active:p.id,patients:[p]};
+  }
+  const p=makePatient('Patient 1',0,'mgdl');
+  return{active:p.id,patients:[p]};
+}
+let store=loadStore();
+let saveT;
+const save=()=>{clearTimeout(saveT);try{localStorage.setItem(LS,JSON.stringify(store))}catch(_){}};
+const cur=()=>store.patients.find(p=>p.id===store.active)||store.patients[0];
+const peekDay=k=>cur().days[k];
+const getDay=k=>peekDay(k)||(cur().days[k]={morning:newSlot(),evening:newSlot()});
+function applyPatientTheme(){document.documentElement.style.setProperty('--pat',PATS[cur().color%6])}
+
+const newSlot=()=>({m:[{s:'',d:'',p:''},{s:'',d:'',p:''},{s:'',d:'',p:''}],
+                    gs:[{v:'',c:'fast'},{v:'',c:'pre'},{v:'',c:'post'}],
+                    done:false,doneAt:null});
+
+/* ============ glycémie : statistiques d'une prise ============ */
+function slotGly(sl){
+  return ((sl&&sl.gs)?sl.gs:[]).filter(e=>e.v!==''&&isFinite(+e.v)).map(e=>({mg:+e.v,c:e.c}));
+}
+function glyMajorCtx(list){
+  const cnt={fast:0,pre:0,post:0};
+  list.forEach(e=>{cnt[e.c]=(cnt[e.c]||0)+1});
+  let best='fast',n=-1;
+  ['fast','pre','post'].forEach(k=>{if(cnt[k]>n){n=cnt[k];best=k}});
+  return best;
+}
+function glyMajorArr(arr){
+  const cnt={fast:0,pre:0,post:0};
+  arr.forEach(c=>{cnt[c]=(cnt[c]||0)+1});
+  let best='fast',n=-1;
+  ['fast','pre','post'].forEach(k=>{if(cnt[k]>n){n=cnt[k];best=k}});
+  return best;
+}
+function glyStatsOf(sl){
+  const list=slotGly(sl);
+  if(!list.length)return null;
+  const ctxs={};
+  list.forEach(e=>ctxs[e.c]=1);
+  return{avg:Math.round(avg(list.map(e=>e.mg))),n:list.length,
+         ctx:glyMajorCtx(list),mix:Object.keys(ctxs).length>1};
+}
+
+/* ============ interprétation ============ */
+const inR=(v,a,b)=>v!==''&&isFinite(+v)&&+v>=a&&+v<=b;
+const validM=m=>inR(m.s,60,260)&&inR(m.d,40,160);
+
+function slotStats(sl){
+  const ms=((sl&&sl.m)?sl.m:[]).filter(validM);
+  if(!ms.length)return null;
+  const hrs=ms.map(m=>+m.p).filter(v=>v!==''&&isFinite(v));
+  const hr=hrs.length?Math.round(avg(hrs)):null;
+  return {n:ms.length,sys:Math.round(avg(ms.map(m=>+m.s))),dia:Math.round(avg(ms.map(m=>+m.d))),hr};
+}
+
+const gUnit=()=>cur().unit==='mmol';
+const gUnitLabel=()=>gUnit()?'mmol/L':'mg/dL';
+const gShow=v=>{
+  if(v==null)return'—';
+  if(gUnit())return (v/18).toLocaleString('fr-FR',{minimumFractionDigits:1,maximumFractionDigits:1});
+  return String(Math.round(v));
+};
+function dualFull(mg){
+  if(mg==null||!isFinite(mg))return'—';
+  return frN(mg/18,1)+' mmol/L <span class="alt">('+frN(mg,0)+' mg/dL)</span>';
+}
+function dualPlain(mg){
+  if(mg==null||!isFinite(mg))return'—';
+  return frN(mg/18,1)+' mmol/L ('+frN(mg,0)+' mg/dL)';
+}
+function dualCompact(mg){
+  if(mg==null||!isFinite(mg))return'—';
+  return frN(mg/18,1)+' ('+frN(mg,0)+')';
+}
+
+/* ============ cadran ============ */
+const GA={v0:40,v1:200,a0:-210,a1:30};
+const Adeg=v=>GA.a0+(clamp(v,GA.v0,GA.v1)-GA.v0)/(GA.v1-GA.v0)*(GA.a1-GA.a0);
+const gTimers={};
+function gaugeSVG(){
+  const cx=105,cy=105;
+  const P=(r,a)=>{const t=a*Math.PI/180;return[cx+r*Math.cos(t),cy+r*Math.sin(t)]};
+  const arc=(r,f,t)=>{const p1=P(r,f),p2=P(r,t);return'M '+p1[0].toFixed(2)+' '+p1[1].toFixed(2)+' A '+r+' '+r+' 0 '+((t-f)>180?1:0)+' 1 '+p2[0].toFixed(2)+' '+p2[1].toFixed(2)};
+  let s='<svg viewBox="0 0 210 210" aria-hidden="true">';
+  const zones=[[40,135,'#3E7A4E'],[135,150,'#DD7A1F'],[150,200,'#B23A2A']];
+  zones.forEach(z=>{s+='<path d="'+arc(84,Adeg(z[0])+.9,Adeg(z[1])-.9)+'" stroke="'+z[2]+'" stroke-width="11" fill="none" opacity=".5"/>'});
+  for(let v=40;v<=200;v+=10){
+    const a=Adeg(v),maj=v%40===0,p1=P(maj?61:66.5,a),p2=P(73,a);
+    s+='<line x1="'+p1[0].toFixed(1)+'" y1="'+p1[1].toFixed(1)+'" x2="'+p2[0].toFixed(1)+'" y2="'+p2[1].toFixed(1)+'" stroke="#8A8371" stroke-width="'+(maj?1.6:1)+'"/>';
+  }
+  [40,80,120,160,200].forEach(v=>{
+    const p=P(50,Adeg(v));
+    s+='<text x="'+p[0].toFixed(1)+'" y="'+(p[1]+3.2).toFixed(1)+'" text-anchor="middle" class="gt">'+v+'</text>';
+  });
+  s+='<text x="105" y="169" text-anchor="middle" class="gu">mmHg</text>';
+  s+='<g class="g-rot g-dia" transform="rotate(-210 105 105)"><polygon points="197,105 206,100.4 206,109.6" fill="#B23A2A"/></g>';
+  s+='<g class="g-rot g-sys" transform="rotate(-210 105 105)"><line x1="88" y1="105" x2="164" y2="105" stroke="#222A35" stroke-width="2.6" stroke-linecap="round"/></g>';
+  s+='<circle cx="105" cy="105" r="6.5" fill="#222A35"/><circle cx="105" cy="105" r="2.2" fill="#B23A2A"/>';
+  return s+'</svg>';
+}
+function setGauge(name,st,sweep){
+  const box=document.getElementById('slot-'+name);if(!box)return;
+  const sys=box.querySelector('.g-sys'),dia=box.querySelector('.g-dia');
+  if(!sys||!dia)return;
+  const tS=st?Adeg(st.sys):GA.a0,tD=st?Adeg(st.dia):GA.a0;
+  clearTimeout(gTimers[name]);
+  if(sweep){
+    sys.classList.add('sweep');dia.classList.add('sweep');
+    sys.style.transform='rotate('+Adeg(197)+'deg)';
+    dia.style.transform='rotate('+Adeg(97)+'deg)';
+    gTimers[name]=setTimeout(function(){
+      sys.classList.remove('sweep');dia.classList.remove('sweep');
+      sys.style.transform='rotate('+tS+'deg)';dia.style.transform='rotate('+tD+'deg)';
+    },500);
+  }else{
+    sys.style.transform='rotate('+tS+'deg)';dia.style.transform='rotate('+tD+'deg)';
+  }
+  document.getElementById('gv-'+name).innerHTML=st?(st.sys+'<small> / '+st.dia+'</small> <small>mmHg</small>'):('—<small> / —</small> <small>mmHg</small>');
+  const gp=document.getElementById('gp-'+name);
+  if(st){
+    const pl=pulseLevel(st.hr);
+    gp.innerHTML=(pl?dotHTML(pl,true):'')+'<span>'+(st.hr!=null?('pouls moyen '+st.hr+' bpm'):'pouls non saisi')+'</span>';
+  }else gp.textContent='en attente de mesures';
+  const ce=document.getElementById('gc-'+name);
+  if(st){const c=bpInfo(st.sys,st.dia);ce.textContent=c.l;ce.className='cat '+c.k}
+  else{ce.textContent='';ce.className='cat'}
+}
+
+/* ============ état ============ */
+const state={tab:'today',date:todayISO(),range:30,
+             /* période du registre : pilote l'affichage ET le PDF */
+             pdfFrom:iso(addDays(new Date(),-6)),pdfTo:todayISO()};
+
+/* ============ bandeau des dossiers ============ */
+function renderDossiers(){
+  const host=$('#dossiers');
+  const chips=store.patients.map(p=>{
+    const act=p.id===store.active,col=PATS[p.color%6];
+    return '<button type="button" class="chip '+(act?'active':'')+'" data-id="'+p.id+'" style="--pc:'+col+'">'+
+      '<span class="seal-mini" style="background:'+col+'">'+esc(initials(p.name))+'</span><span>'+esc(p.name)+'</span></button>';
+  }).join('');
+  const addBtn=store.patients.length<MAX_PAT
+    ?'<button type="button" class="chip add" id="chipAdd">'+icon('plus')+' Nouveau dossier</button>'
+    :'<span class="mut" style="font:italic 12px var(--serif)">maximum de '+MAX_PAT+' dossiers atteint</span>';
+  host.innerHTML='<span class="dossiers-label">Dossiers</span>'+chips+addBtn;
+  host.querySelectorAll('.chip[data-id]').forEach(ch=>{
+    ch.onclick=()=>{
+      if(store.active===ch.dataset.id)return;
+      store.active=ch.dataset.id;
+      state.date=todayISO();
+      save();applyPatientTheme();switchTab(state.tab);
+    };
+  });
+  const add=document.getElementById('chipAdd');
+  if(add)add.onclick=addPatient;
+}
+function addPatient(){
+  if(store.patients.length>=MAX_PAT){toast('Maximum de '+MAX_PAT+' dossiers atteint.','alert');return}
+  let n=1;while(store.patients.some(p=>p.name==='Patient '+n))n++;
+  const p=makePatient('Patient '+n,store.patients.length%PATS.length,'mgdl');
+  store.patients.push(p);store.active=p.id;
+  save();applyPatientTheme();
+  state.date=todayISO();
+  switchTab(state.tab);
+  toast('Dossier « '+esc(p.name)+' » créé — renommez-le dans Réglages.');
+}
+
+/* ============ fiche du jour ============ */
+const SLOT_META={
+ morning:{icon:'sun',t:'Matin',sub:'au lever — 3 mesures tension + 3 glycémies'},
+ evening:{icon:'moon',t:'Soir',sub:'au coucher — 3 mesures tension + 3 glycémies'}};
+
+function renderSheet(){
+  const host=$('#view-today');
+  const isToday=state.date===todayISO();
+  host.innerHTML=
+   '<div class="sheet-head">'+
+    '<div class="date-nav">'+
+      '<button class="nav-btn" id="dPrev" aria-label="Jour précédent">'+icon('chevL')+'</button>'+
+      '<div class="date-big"><h2>'+fmtLong(state.date)+'</h2></div>'+
+      '<button class="nav-btn" id="dNext" aria-label="Jour suivant" '+(isToday?'disabled':'')+'>'+icon('chevR')+'</button>'+
+    '</div>'+
+    '<div class="head-right">'+
+      '<button class="link-btn" id="dToday" '+(isToday?'hidden':'')+'>revenir à aujourd’hui</button>'+
+      '<p class="now-hint" id="nowHint"></p>'+
+    '</div>'+
+   '</div>'+
+   '<section class="slot morning" id="slot-morning" data-slot="morning"></section>'+
+   '<div class="slot-rule"><span></span></div>'+
+   '<section class="slot evening" id="slot-evening" data-slot="evening"></section>'+
+   '<div class="lvl-note top" style="padding-left:30px;padding-right:30px">'+legendDots()+' <span class="mut">'+legendThresholds()+'</span></div>'+
+   '<div class="gluco-foot" id="glucoFoot"></div>';
+  $('#dPrev').onclick=()=>{state.date=iso(addDays(fromISO(state.date),-1));renderSheet()};
+  $('#dNext').onclick=()=>{state.date=iso(addDays(fromISO(state.date),1));renderSheet()};
+  $('#dToday').onclick=()=>{state.date=todayISO();renderSheet()};
+  renderSlot('morning');renderSlot('evening');
+  renderNowHint();renderGlucoFoot();
+}
+
+function slotStateHTML(sl){
+  if(sl.done&&slotStats(sl))
+    return '<span class="done-note">'+icon('check')+' validée'+(sl.doneAt?(' · '+sl.doneAt):'')+'</span><button class="link-btn b-unval">modifier</button>';
+  return '<button class="btn b-val">'+icon('check')+' Valider la prise</button>';
+}
+function setSlotState(name,sl){
+  const el=document.getElementById('state-'+name);if(!el)return;
+  el.innerHTML=slotStateHTML(sl);
+  const b=el.querySelector('.b-val');if(b)b.onclick=()=>validateSlot(name);
+  const u=el.querySelector('.b-unval');if(u)u.onclick=()=>{sl.done=false;sl.doneAt=null;save();setSlotState(name,sl);toast('Prise déverrouillée — pensez à la revalider.','pen')};
+}
+
+function renderSlot(name){
+  const day=getDay(state.date),sl=day[name],meta=SLOT_META[name];
+  const rows=[0,1,2].map(i=>{
+    const m=sl.m[i];
+    return '<tr>'+
+      '<td class="rn">'+['I','II','III'][i]+'</td>'+
+      '<td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="s" data-i="'+i+'" value="'+esc(m.s)+'" placeholder="—" aria-label="Systolique, mesure '+(i+1)+'"></td>'+
+      '<td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="d" data-i="'+i+'" value="'+esc(m.d)+'" placeholder="—" aria-label="Diastolique, mesure '+(i+1)+'"></td>'+
+      '<td><input class="cell-in" inputmode="numeric" maxlength="3" data-f="p" data-i="'+i+'" value="'+esc(m.p)+'" placeholder="—" aria-label="Pouls, mesure '+(i+1)+'"></td>'+
+    '</tr>'}).join('');
+  const ctxOpts=sel=>['fast','pre','post'].map(k=>'<option value="'+k+'"'+(k===sel?' selected':'')+'>'+GLY_CTX[k]+'</option>').join('');
+  const glyRows=[0,1,2].map(i=>{
+    const g=sl.gs[i];
+    return '<tr>'+
+      '<td class="rn">'+['I','II','III'][i]+'</td>'+
+      '<td><select class="ctx-in" data-i="'+i+'" aria-label="Contexte glycémie '+(i+1)+'" title="Moment de la mesure">'+ctxOpts(g.c)+'</select></td>'+
+      '<td><input class="cell-in glu-in" inputmode="decimal" data-i="'+i+'" value="'+esc(g.v===''?'':gShow(+g.v))+'" placeholder="—" aria-label="Glycémie '+(i+1)+'"></td>'+
+      '<td class="gread" data-i="'+i+'"></td>'+
+    '</tr>'}).join('');
+  document.getElementById('slot-'+name).innerHTML=
+    '<div class="slot-head">'+
+      icon(meta.icon)+'<span class="slot-title">'+meta.t+'</span>'+
+      '<span class="slot-sub">'+meta.sub+'</span>'+
+      '<span class="slot-state" id="state-'+name+'"></span>'+
+    '</div>'+
+    '<div class="slot-body">'+
+      '<div>'+
+        '<table class="meas">'+
+          '<thead><tr><th>Mesure</th><th>Systolique<em>mmHg</em></th><th>Diastolique<em>mmHg</em></th><th>Pouls<em>bpm</em></th></tr></thead>'+
+          '<tbody>'+rows+'</tbody>'+
+          '<tfoot><tr class="avg"><td class="rn avg-lbl">moy.</td><td class="avg-cell" id="avg-'+name+'-s">—</td><td class="avg-cell" id="avg-'+name+'-d">—</td><td class="avg-cell" id="avg-'+name+'-p">—</td></tr></tfoot>'+
+        '</table>'+
+        '<p class="gly-cap">'+icon('droplet')+' Glycémie <em>— jusqu’à 3 mesures, chacune avec son contexte</em></p>'+
+        '<table class="gly">'+
+          '<thead><tr><th></th><th>Contexte</th><th>Valeur<em>'+gUnitLabel()+'</em></th><th>Lecture<em>mmol/L (mg/dL)</em></th></tr></thead>'+
+          '<tbody>'+glyRows+'</tbody>'+
+          '<tfoot><tr class="avg"><td class="rn avg-lbl">moy.</td><td colspan="3" id="gavg-'+name+'">—</td></tr></tfoot>'+
+        '</table>'+
+        '<div class="slot-err" id="err-'+name+'"></div>'+
+      '</div>'+
+      '<div class="gauge-box">'+
+        gaugeSVG()+
+        '<div class="gauge-val" id="gv-'+name+'"></div>'+
+        '<div class="gauge-pulse" id="gp-'+name+'"></div>'+
+        '<div class="gauge-badge">'+icon('tensiometer')+' tensiomètre · moyenne</div>'+
+        '<div class="cat" id="gc-'+name+'"></div>'+
+      '</div>'+
+    '</div>';
+  $$('#slot-'+name+' .cell-in').forEach(inp=>{
+    if(inp.classList.contains('glu-in'))inp.addEventListener('input',onGlu);
+    else inp.addEventListener('input',onCell);
+    inp.addEventListener('focus',e=>e.target.select());
+  });
+  $$('#slot-'+name+' .ctx-in').forEach(sel=>sel.addEventListener('change',onCtx));
+  setSlotState(name,sl);
+  refreshSlot(name,true);
+}
+
+function onCell(e){
+  const inp=e.target,f=inp.dataset.f,i=+inp.dataset.i;
+  const name=inp.closest('.slot').dataset.slot;
+  const sl=getDay(state.date)[name];
+  const v=inp.value.replace(/[^\d]/g,'');
+  if(v!==inp.value)inp.value=v;
+  sl.m[i][f]=v;
+  if(sl.done){sl.done=false;sl.doneAt=null;setSlotState(name,sl)}
+  save();refreshSlot(name);
+}
+function onGlu(e){
+  const inp=e.target,name=inp.closest('.slot').dataset.slot,i=+inp.dataset.i;
+  const sl=getDay(state.date)[name];
+  let v=inp.value.replace(',','.').replace(/[^\d.]/g,'');
+  const parts=v.split('.');if(parts.length>2)v=parts[0]+'.'+parts.slice(1).join('');
+  if(v!==inp.value)inp.value=v;
+  if(v===''||v==='.'){sl.gs[i].v=''}
+  else{
+    const raw=parseFloat(v);
+    if(isFinite(raw)){
+      const mg=gUnit()?raw*18:raw;
+      sl.gs[i].v=String(Math.round(clamp(mg,20,600)));
+    }else sl.gs[i].v='';
+  }
+  inp.classList.toggle('err',sl.gs[i].v!==''&&(+sl.gs[i].v<20||+sl.gs[i].v>600));
+  if(sl.done){sl.done=false;sl.doneAt=null;setSlotState(name,sl)}
+  save();refreshSlot(name);
+}
+function onCtx(e){
+  const sel=e.target,name=sel.closest('.slot').dataset.slot,i=+sel.dataset.i;
+  const sl=getDay(state.date)[name];
+  sl.gs[i].c=sel.value;
+  save();refreshSlot(name);
+}
+function crossCheck(name){
+  const sl=getDay(state.date)[name],host=document.getElementById('slot-'+name);
+  if(!host)return false;
+  let bad=false;
+  sl.m.forEach((m,i)=>{
+    const sEl=host.querySelector('.cell-in[data-i="'+i+'"][data-f="s"]');
+    const dEl=host.querySelector('.cell-in[data-i="'+i+'"][data-f="d"]');
+    if(!sEl||!dEl)return;
+    const badM=validM(m)&&(+m.d>=+m.s);
+    sEl.classList.toggle('err',badM);dEl.classList.toggle('err',badM);
+    if(badM)bad=true;
+  });
+  document.getElementById('err-'+name).textContent=bad?'Le diastolique doit rester inférieur au systolique — vérifiez la mesure signalée.':'';
+  return bad;
+}
+function refreshSlot(name,sweep=false){
+  const sl=getDay(state.date)[name],st=slotStats(sl);
+  const host=document.getElementById('slot-'+name);
+  document.getElementById('avg-'+name+'-s').textContent=st?st.sys:'—';
+  document.getElementById('avg-'+name+'-d').textContent=st?st.dia:'—';
+  document.getElementById('avg-'+name+'-p').textContent=(st&&st.hr!=null)?st.hr:'—';
+  setGauge(name,st,sweep);
+  host.querySelectorAll('.gread').forEach(td=>{
+    const i=+td.dataset.i,g=sl.gs[i];
+    if(g.v===''){td.innerHTML='<span class="mut">—</span>';return}
+    const info=glyInfoCtx(+g.v,g.c);
+    td.innerHTML=dotHTML(glyLevelCtx(+g.v,g.c))+dualCompact(+g.v)+
+      ' <span class="mut">'+esc(info.l)+'</span>';
+  });
+  const gA=document.getElementById('gavg-'+name);
+  const gs=glyStatsOf(sl);
+  if(gs){
+    const ctxTxt=gs.mix
+      ?(' · contextes : '+[...new Set(slotGly(sl).map(e=>GLY_CTX[e.c]))].join(', '))
+      :(' · '+GLY_CTX[gs.ctx]);
+    gA.innerHTML=dotHTML(glyLevelCtx(gs.avg,gs.ctx))+'<b>'+dualFull(gs.avg)+'</b>'+
+      ' <span class="mut">· '+gs.n+' mesure'+(gs.n>1?'s':'')+ctxTxt+'</span>';
+  }else gA.innerHTML='<span class="mut">—</span>';
+  crossCheck(name);
+}
+function validateSlot(name){
+  const sl=getDay(state.date)[name],st=slotStats(sl);
+  if(!st){toast('Aucune mesure complète (systolique + diastolique) dans cette prise.','alert');return}
+  if(crossCheck(name)){toast('Corrigez la mesure signalée avant de valider.','alert');return}
+  sl.done=true;sl.doneAt=FR.hm.format(new Date());
+  save();setSlotState(name,sl);
+  toast(SLOT_META[name].t+' — moyenne '+st.sys+'/'+st.dia+' mmHg enregistrée pour '+esc(cur().name)+'.');
+  renderNowHint();renderGlucoFoot();
+}
+
+function renderNowHint(){
+  const el=document.getElementById('nowHint');if(!el)return;
+  if(state.date!==todayISO()){el.textContent='Consultation d’un jour archivé — les saisies restent modifiables.';return}
+  const day=getDay(state.date);
+  const mHas=!!slotStats(day.morning),eHas=!!slotStats(day.evening);
+  const h=new Date().getHours()+new Date().getMinutes()/60;
+  if(mHas&&eHas){el.textContent='Les deux prises du jour sont enregistrées. Belle régularité.';return}
+  if(h<13)el.textContent=mHas?'Prise du matin enregistrée — rendez-vous le soir pour le second relevé.':'Bon moment pour la prise du matin, au lever et au calme.';
+  else if(h<17)el.textContent=mHas?'Relevé du matin enregistré — le soir, pensez au second relevé.':'Relevé du matin encore possible — la journée reste modifiable.';
+  else el.textContent=eHas?'Prise du soir enregistrée. À demain.':'Bon moment pour la prise du soir, au coucher.';
+}
+function renderGlucoFoot(){
+  const host=document.getElementById('glucoFoot');if(!host)return;
+  const day=getDay(state.date);
+  const gM=glyStatsOf(day.morning),gE=glyStatsOf(day.evening);
+  const fG=gs=>gs?dotHTML(glyLevelCtx(gs.avg,gs.ctx))+'<b>'+dualFull(gs.avg)+'</b>'+
+    ' <span class="mut">('+gs.n+' mes. · '+GLY_CTX[gs.ctx]+(gs.mix?' mixtes':'')+')</span>':null;
+  const mTxt=fG(gM),eTxt=fG(gE);
+  let base;
+  if(mTxt&&eTxt){
+    base='Glycémies du jour — matin '+mTxt+' · soir '+eTxt+'.';
+  }else if(mTxt){
+    base='Glycémies du matin '+mTxt+' — pensez au contrôle du soir.';
+  }else if(eTxt){
+    base='Glycémies du soir '+eTxt+' — la mesure du matin à jeun manque.';
+  }else{
+    base='Glycémies du jour à noter — jusqu’à 3 par prise, chacune avec son contexte : <b>à jeun</b>, <b>avant repas</b> ou <b>après repas</b>.';
+  }
+  const d7=collectDaily(7);
+  const gmAll=d7.filter(p=>p.gm!=null),geAll=d7.filter(p=>p.ge!=null);
+  let moy='';
+  if(gmAll.length||geAll.length){
+    const parts=[];
+    if(gmAll.length){const a=Math.round(avg(gmAll.map(p=>p.gm)));const ctx=glyMajorArr(gmAll.map(p=>p.gmc));
+      parts.push('matin '+dotHTML(glyLevelCtx(a,ctx))+'<b>'+dualFull(a)+'</b>')}
+    if(geAll.length){const a=Math.round(avg(geAll.map(p=>p.ge)));const ctx=glyMajorArr(geAll.map(p=>p.gec));
+      parts.push('soir '+dotHTML(glyLevelCtx(a,ctx))+'<b>'+dualFull(a)+'</b>')}
+    moy=' <span class="mut">Moyenne 7 jours — '+parts.join(' · ')+'.</span>';
+  }
+  host.innerHTML=icon('droplet')+' <span>'+base+moy+'</span>';
+}
+
+/* ============ registre — la période choisie pilote l'affichage ET le rapport ============ */
+function renderRegister(){
+  const host=$('#view-register');
+  /* normalisation : début ≤ fin, borné à aujourd'hui */
+  if(fromISO(state.pdfFrom)>fromISO(state.pdfTo)){
+    const t=state.pdfFrom;state.pdfFrom=state.pdfTo;state.pdfTo=t;
+  }
+  const start=fromISO(state.pdfFrom),end=fromISO(state.pdfTo);
+  const today=fromISO(todayISO());
+  const span=Math.round((end-start)/86400000)+1;
+  const days=[];
+  for(let i=0;i<span;i++)days.push(iso(addDays(start,i)));
+  const yr=end.getFullYear()!==new Date().getFullYear()?' '+end.getFullYear():'';
+  host.innerHTML=
+   '<div class="reg-toolbar">'+
+     '<button class="nav-btn" id="wPrev" aria-label="Période précédente" title="Période précédente">'+icon('chevL')+'</button>'+
+     '<button class="nav-btn" id="wNext" aria-label="Période suivante" title="Période suivante" '+(end>=today?'disabled':'')+'>'+icon('chevR')+'</button>'+
+     '<h3 class="reg-title">'+esc(cur().name)+' — période du '+fmtDay(iso(start))+' au '+fmtDay(iso(end))+yr+' <span class="mut">('+span+' jour'+(span>1?'s':'')+')</span></h3>'+
+     '<div class="reg-actions">'+
+       '<label class="rng">Du <input type="date" id="pdfFrom" value="'+state.pdfFrom+'" max="'+todayISO()+'"></label>'+
+       '<label class="rng">au <input type="date" id="pdfTo" value="'+state.pdfTo+'" max="'+todayISO()+'"></label>'+
+       '<button class="link-btn" id="btnW7">semaine en cours</button>'+
+       '<button class="link-btn" id="btnD30">30 derniers jours</button>'+
+       '<button class="btn ghost" id="btnCsv">'+icon('download')+' Export CSV</button>'+
+       '<button class="btn ghost" id="btnPdf">'+icon('file')+' Télécharger PDF</button>'+
+       '<button class="btn ghost" id="btnSharePdf">'+icon('share')+' Partager PDF</button>'+
+     '</div>'+
+   '</div>'+
+   '<p class="reg-hint">Les dates choisissent la période affichée ci-dessous et celle du rapport PDF. Cliquez sur une ligne pour ouvrir sa journée dans Saisie.</p>'+
+   '<div class="lvl-note">'+legendDots()+' <span class="mut">'+legendThresholds()+'</span></div>'+
+   '<div class="reg-wrap"><table class="reg">'+
+     '<thead>'+
+       '<tr><th rowspan="2" class="tleft">Jour</th><th colspan="3">Matin</th><th colspan="3">Soir</th><th colspan="2">Glycémie moy. (contexte) · mmol/L (mg/dL)</th></tr>'+
+       '<tr><th>Tension</th><th>Pouls</th><th>État</th><th>Tension</th><th>Pouls</th><th>État</th><th>Matin</th><th>Soir</th></tr>'+
+     '</thead>'+
+     '<tbody id="regBody">'+days.map(regRow).join('')+'</tbody>'+
+     '<tfoot>'+regFoot(days)+'</tfoot>'+
+   '</table></div>';
+  /* navigation : décale toute la période (les flèches suivent la durée choisie) */
+  const shiftRange=dir=>{
+    const s=fromISO(state.pdfFrom),e=fromISO(state.pdfTo);
+    const sp=Math.round((e-s)/86400000)+1;
+    let ns=addDays(s,dir*sp),ne=addDays(e,dir*sp);
+    const td=fromISO(todayISO());
+    if(ne>td){const over=Math.round((ne-td)/86400000);ns=addDays(ns,-over);ne=td}
+    if(ne<fromISO(state.pdfFrom)&&dir>0)return; /* déjà à aujourd'hui */
+    state.pdfFrom=iso(ns);state.pdfTo=iso(ne);
+    renderRegister();
+  };
+  $('#wPrev').onclick=()=>shiftRange(-1);
+  $('#wNext').onclick=()=>shiftRange(1);
+  const setRange=(f,t)=>{state.pdfFrom=f;state.pdfTo=t;renderRegister()};
+  $('#pdfFrom').addEventListener('change',e=>{
+    if(!e.target.value)return;
+    state.pdfFrom=e.target.value;
+    if(fromISO(state.pdfFrom)>fromISO(state.pdfTo))state.pdfTo=state.pdfFrom;
+    renderRegister();
+  });
+  $('#pdfTo').addEventListener('change',e=>{
+    if(!e.target.value)return;
+    state.pdfTo=e.target.value;
+    if(fromISO(state.pdfFrom)>fromISO(state.pdfTo))state.pdfFrom=state.pdfTo;
+    renderRegister();
+  });
+  $('#btnW7').onclick=()=>{
+    const s=startOfWeek(new Date());
+    const e0=addDays(s,6),td=new Date();
+    setRange(iso(s),iso(e0>td?td:e0));
+  };
+  $('#btnD30').onclick=()=>{
+    const td=new Date();
+    setRange(iso(addDays(td,-29)),iso(td));
+  };
+  $('#btnCsv').onclick=exportCSV;
+  $('#btnPdf').onclick=generatePDF;
+  $('#btnSharePdf').onclick=sharePDF;
+  $('#regBody').addEventListener('click',e=>{
+    const tr=e.target.closest('tr[data-d]');if(!tr)return;
+    state.date=tr.dataset.d;switchTab('today');
+  });
+  setTimeout(()=>{if(navigator.onLine)loadJsPdf(function(){},true)},800);
+}
+function regCell(sl){
+  const st=sl?slotStats(sl):null;
+  if(!st)return'<td class="mut">—</td><td class="mut">—</td><td class="mut">—</td>';
+  const lv=bpLevel(st.sys,st.dia);
+  const pl=pulseLevel(st.hr);
+  return '<td>'+dotHTML(lv)+'<b>'+st.sys+'/'+st.dia+'</b></td>'+
+         '<td>'+(st.hr!=null?dotHTML(pl)+st.hr:'<span class="mut">—</span>')+'</td>'+
+         '<td>'+(sl.done?icon('check','done'):'')+'</td>';
+}
+function regGlyCell(sl){
+  const gs=glyStatsOf(sl);
+  if(!gs)return'<span class="mut">—</span>';
+  const ctxs=[...new Set(slotGly(sl).map(e=>GLY_CTX[e.c]))];
+  return dotHTML(glyLevelCtx(gs.avg,gs.ctx))+dualCompact(gs.avg)+
+    (gs.n>1?'<span class="xn">×'+gs.n+'</span>':'')+
+    '<br><span class="gctx">('+esc(ctxs.join(' · '))+')</span>';
+}
+function regRow(k){
+  const d=peekDay(k),today=k===todayISO();
+  return '<tr data-d="'+k+'" class="'+(today?'today-row':'')+'">'+
+    '<td class="day">'+fmtDay(k)+(today?' <span class="you">— aujourd’hui</span>':'')+'</td>'+
+    regCell(d&&d.morning)+regCell(d&&d.evening)+
+    '<td>'+regGlyCell(d&&d.morning)+'</td>'+
+    '<td>'+regGlyCell(d&&d.evening)+'</td>'+
+  '</tr>';
+}
+function regFoot(days){
+  const c={ms:[],md:[],mp:[],es:[],ed:[],ep:[],gm:[],gmc:[],ge:[],gec:[]};
+  days.forEach(k=>{
+    const d=peekDay(k);if(!d)return;
+    const ms=slotStats(d.morning),es=slotStats(d.evening);
+    if(ms){c.ms.push(ms.sys);c.md.push(ms.dia);if(ms.hr!=null)c.mp.push(ms.hr)}
+    if(es){c.es.push(es.sys);c.ed.push(es.dia);if(es.hr!=null)c.ep.push(es.hr)}
+    const gM=glyStatsOf(d.morning),gE=glyStatsOf(d.evening);
+    if(gM){c.gm.push(gM.avg);c.gmc.push(gM.ctx)}
+    if(gE){c.ge.push(gE.avg);c.gec.push(gE.ctx)}
+  });
+  const f=(a,dec=0)=>a.length?frN(avg(a),dec):'—';
+  const mpA=c.mp.length?Math.round(avg(c.mp)):null;
+  const gmA=c.gm.length?Math.round(avg(c.gm)):null;
+  const geA=c.ge.length?Math.round(avg(c.ge)):null;
+  const gmCtx=[...new Set(c.gmc.map(x=>GLY_CTX[x]))];
+  const geCtx=[...new Set(c.gec.map(x=>GLY_CTX[x]))];
+  return '<tr><td class="day">Moyenne de la période</td>'+
+    '<td>'+(c.ms.length?dotHTML(bpLevel(Math.round(avg(c.ms)),Math.round(avg(c.md)))):'')+'<b>'+f(c.ms)+'/'+f(c.md)+'</b></td>'+
+    '<td>'+(mpA!=null?dotHTML(pulseLevel(mpA))+mpA:'—')+'</td><td></td>'+
+    '<td>'+(c.es.length?dotHTML(bpLevel(Math.round(avg(c.es)),Math.round(avg(c.ed)))):'')+'<b>'+f(c.es)+'/'+f(c.ed)+'</b></td>'+
+    '<td>'+(c.ep.length?dotHTML(pulseLevel(Math.round(avg(c.ep))))+Math.round(avg(c.ep)):'—')+'</td><td></td>'+
+    '<td>'+(gmA!=null?dotHTML(glyLevelCtx(gmA,glyMajorArr(c.gmc)))+dualFull(gmA)+
+      '<br><span class="gctx">('+esc(gmCtx.join(' · '))+')</span>':'—')+'</td>'+
+    '<td>'+(geA!=null?dotHTML(glyLevelCtx(geA,glyMajorArr(c.gec)))+dualFull(geA)+
+      '<br><span class="gctx">('+esc(geCtx.join(' · '))+')</span>':'—')+'</td></tr>';
+}
+
+/* ============ export CSV ============ */
+async function exportCSV(){
+  const rows=[['Date','Patient','Moment','SYS 1','DIA 1','Pouls 1','SYS 2','DIA 2','Pouls 2','SYS 3','DIA 3','Pouls 3',
+    'Moy. SYS','Moy. DIA','Moy. pouls','Niveau tension',
+    'Gly 1','Contexte 1','Gly 2','Contexte 2','Gly 3','Contexte 3','Gly moy mmol/L','Gly moy mg/dL','Niveaux glycémie','Validée']];
+  let count=0;
+  store.patients.forEach(pat=>{
+    Object.keys(pat.days).sort().forEach(k=>{
+      const d=pat.days[k];if(!d)return;
+      [['Matin',d.morning],['Soir',d.evening]].forEach(p=>{
+        const nm=p[0],sl=p[1];if(!sl)return;
+        const any=sl.m.some(m=>m.s!==''||m.d!==''||m.p!=='')||sl.gs.some(g=>g.v!=='');
+        if(!any)return;
+        count++;
+        const st=slotStats(sl),ms=sl.m;
+        const gs=slotGly(sl),gSt=glyStatsOf(sl);
+        const g1=gs[0],g2=gs[1],g3=gs[2];
+        rows.push([k,pat.name,nm,ms[0].s,ms[0].d,ms[0].p,ms[1].s,ms[1].d,ms[1].p,ms[2].s,ms[2].d,ms[2].p,
+          st?st.sys:'',st?st.dia:'',(st&&st.hr!=null)?st.hr:'',st?bpInfo(st.sys,st.dia).l:'',
+          g1?frN(g1.mg/18,1):'',g1?GLY_CTX[g1.c]:'',
+          g2?frN(g2.mg/18,1):'',g2?GLY_CTX[g2.c]:'',
+          g3?frN(g3.mg/18,1):'',g3?GLY_CTX[g3.c]:'',
+          gSt?frN(gSt.avg/18,1):'',gSt?Math.round(gSt.avg):'',
+          gs.map(e=>GLY_CTX[e.c]+' : '+glyInfoCtx(e.mg,e.c).l).join(' ; '),
+          sl.done?'oui':'non']);
+      });
+    });
+  });
+  if(!count){toast('Aucune donnée à exporter pour l’instant.','alert');return}
+  const csv='\ufeff'+rows.map(r=>r.map(c=>'"'+String(c).replace(/"/g,'""')+'"').join(';')).join('\r\n');
+  const res=await saveFile(new Blob([csv],{type:'text/csv;charset=utf-8'}),
+    'carnets-tension-'+todayISO()+'.csv','Export CSV','text/csv','.csv');
+  reportSave(res,'Export CSV — '+count+' prise(s), tous dossiers');
+}
+
+/* ============ collecte journalière ============ */
+function collectRange(fk,tk){
+  const out=[];
+  const start=fromISO(fk),end=fromISO(tk);
+  if(end<start)return out;
+  for(let d=new Date(start);d<=end;d=addDays(d,1)){
+    const k=iso(d);
+    const dd=peekDay(k);if(!dd)continue;
+    const ms=dd.morning?slotStats(dd.morning):null;
+    const es=dd.evening?slotStats(dd.evening):null;
+    const gM=glyStatsOf(dd.morning),gE=glyStatsOf(dd.evening);
+    if(!ms&&!es&&!gM&&!gE)continue;
+    const vals=[ms,es].filter(Boolean);
+    const hrs=vals.map(v=>v.hr).filter(v=>v!=null);
+    out.push({k,idx:Math.round((d-start)/86400000),
+      sys:vals.length?Math.round(avg(vals.map(v=>v.sys))):null,
+      dia:vals.length?Math.round(avg(vals.map(v=>v.dia))):null,
+      hr:hrs.length?Math.round(avg(hrs)):null,
+      gm:gM?gM.avg:null,gmn:gM?gM.n:0,gmc:gM?gM.ctx:null,
+      ge:gE?gE.avg:null,gen:gE?gE.n:0,gec:gE?gE.ctx:null});
+  }
+  return out;
+}
+function collectDaily(n){
+  return collectRange(iso(addDays(new Date(),-(n-1))),todayISO());
+}
+
+/* ============ génération PDF ============ */
+const pdfTxt=s=>String(s).replace(/[’‘]/g,"'").replace(/[«»]/g,'"').replace(/[–—]/g,'-').replace(/≥/g,'>=').replace(/≤/g,'<=').replace(/\u202F|\u00A0/g,' ');
+const h2rgb=h=>{const n=parseInt(h.slice(1),16);return[(n>>16)&255,(n>>8)&255,n&255]};
+function loadJsPdf(cb,silent){
+  if(window.jspdf&&window.jspdf.jsPDF){cb();return}
+  if(!silent)toast('Chargement du module PDF…');
+  const s=document.createElement('script');
+  s.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+  s.onload=cb;
+  s.onerror=function(){
+    if(silent)return;
+    toast('Module PDF indisponible (hors ligne ?) — impression système de secours.','alert');
+    try{buildPrint(state.pdfFrom,state.pdfTo);window.print()}catch(_){}
+  };
+  document.head.appendChild(s);
+}
+function getPdfRange(){
+  const fk=state.pdfFrom,tk=state.pdfTo;
+  if(!fk||!tk){toast('Choisissez les deux dates du rapport.','alert');return null}
+  if(fromISO(fk)>fromISO(tk)){toast('La date de début est postérieure à la date de fin.','alert');return null}
+  if(Math.round((fromISO(tk)-fromISO(fk))/86400000)+1>366){toast('Période trop longue — 366 jours maximum.','alert');return null}
+  return{fk,tk};
+}
+function generatePDF(){
+  const rng=getPdfRange();if(!rng)return;
+  loadJsPdf(async function(){
+    try{
+      const fd=buildPDFBlob(rng.fk,rng.tk);
+      const res=await saveFile(fd.blob,fd.name,'Rapport PDF','application/pdf','.pdf');
+      reportSave(res,'PDF du '+fmtMed(rng.fk)+' au '+fmtMed(rng.tk));
+    }catch(err){
+      if(window.showFatal)window.showFatal('PDF : '+err.message);
+      toast('Erreur pendant la génération du PDF.','alert');
+    }
+  });
+}
+function sharePDF(){
+  const rng=getPdfRange();if(!rng)return;
+  const go=()=>{
+    try{
+      const fd=buildPDFBlob(rng.fk,rng.tk);
+      shareBlob(fd.blob,fd.name,'application/pdf','PDF du '+fmtMed(rng.fk)+' au '+fmtMed(rng.tk));
+    }catch(err){
+      if(window.showFatal)window.showFatal('PDF : '+err.message);
+    }
+  };
+  if(window.jspdf&&window.jspdf.jsPDF)go();
+  else loadJsPdf(function(){go()});
+}
+function buildPDFBlob(fk,tk){
+  const jsPDF=window.jspdf.jsPDF;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const Wp=210,Mg=14,Rg=Wp-Mg*2;
+  const pat=cur();
+  const rows=collectRange(fk,tk);
+  const bpD=rows.filter(p=>p.sys!=null);
+  const hrL=rows.map(p=>p.hr).filter(v=>v!=null);
+  const gmL=rows.filter(p=>p.gm!=null),geL=rows.filter(p=>p.ge!=null);
+  const mR=bpD.length?(Math.round(avg(bpD.map(p=>p.sys)))+'/'+Math.round(avg(bpD.map(p=>p.dia)))+' mmHg'):'-';
+
+  let y=Mg+6;
+  doc.setFont('helvetica','bold');doc.setFontSize(15);doc.setTextColor(25);
+  doc.text(pdfTxt('Systole - carnet de '+pat.name),Mg,y);y+=6;
+  doc.setFont('helvetica','normal');doc.setFontSize(9);doc.setTextColor(100);
+  doc.text(pdfTxt('Période : du '+fmtLong(fk)+' au '+fmtLong(tk)+' ('+rows.length+' jour(s) renseigné(s) sur '+Math.round((fromISO(tk)-fromISO(fk))/86400000)+1+') - glycémie : mmol/L (mg/dL)'),Mg,y);y+=3.5;
+  doc.setDrawColor(30);doc.setLineWidth(.7);doc.line(Mg,y,Wp-Mg,y);y+=6;
+
+  doc.setFontSize(8.5);doc.setTextColor(90);
+  let lx=Mg;
+  [['ok','normale'],['warn','élevée'],['crit','très élevée']].forEach(it=>{
+    const rgb=h2rgb(LEV[it[0]].c);
+    doc.setFillColor(rgb[0],rgb[1],rgb[2]);
+    doc.circle(lx+1.4,y-1.1,1.3,'F');
+    doc.text(pdfTxt(it[1]),lx+4.6,y);
+    lx+=doc.getTextWidth(pdfTxt(it[1]))+13;
+  });
+  doc.setFontSize(7.6);doc.setTextColor(120);
+  y+=4.6;
+  doc.text(doc.splitTextToSize(pdfTxt(legendThresholds().replace(/&lt;/g,'<')),Rg),Mg,y);y+=6;
+
+  const aS=bpD.length?Math.round(avg(bpD.map(p=>p.sys))):null;
+  const aD=bpD.length?Math.round(avg(bpD.map(p=>p.dia))):null;
+  const stats=[
+    {l:'Tension - moyenne sur la période',v:mR,lv:bpD.length?bpLevel(aS,aD):null},
+  ];
+  if(hrL.length){const a=Math.round(avg(hrL));stats.push({l:'Pouls moyen',v:a+' bpm',lv:pulseLevel(a)})}
+  if(gmL.length){const a=Math.round(avg(gmL.map(p=>p.gm)));const ctx=glyMajorArr(gmL.map(p=>p.gmc));
+    stats.push({l:'Glycémie moyenne matin ('+GLY_CTX[ctx]+')',v:frN(a/18,1)+' mmol/L ('+frN(a,0)+' mg/dL)',lv:glyLevelCtx(a,ctx)})}
+  if(geL.length){const a=Math.round(avg(geL.map(p=>p.ge)));const ctx=glyMajorArr(geL.map(p=>p.gec));
+    stats.push({l:'Glycémie moyenne soir ('+GLY_CTX[ctx]+')',v:frN(a/18,1)+' mmol/L ('+frN(a,0)+' mg/dL)',lv:glyLevelCtx(a,ctx)})}
+  stats.forEach(st=>{
+    doc.setFontSize(9.5);doc.setTextColor(90);
+    doc.text(pdfTxt(st.l+' :'),Mg,y);
+    let vx=Mg+82;
+    if(st.lv){const rgb=h2rgb(LEV[st.lv].c);doc.setFillColor(rgb[0],rgb[1],rgb[2]);doc.circle(vx+1.2,y-1.2,1.3,'F');vx+=5}
+    doc.setTextColor(25);doc.setFont('helvetica','bold');
+    doc.text(pdfTxt(st.v),vx,y);
+    doc.setFont('helvetica','normal');
+    y+=5.4;
+  });
+  y+=3;
+
+  const heads=['Jour','Matin','Pouls','Soir','Pouls','Gly. matin (ctx)','Gly. soir (ctx)'];
+  const cols=[40,20,15,20,15,32,32];
+  function headRow(yy){
+    doc.setFillColor(34,42,53);doc.setTextColor(255);
+    doc.rect(Mg,yy,Rg,7.5,'F');
+    doc.setFont('helvetica','bold');doc.setFontSize(7.6);
+    let xx=Mg;
+    heads.forEach((h,i)=>{doc.text(pdfTxt(h),xx+2,yy+5);xx+=cols[i]});
+    doc.setFont('helvetica','normal');
+    return yy+7.5;
+  }
+  function dataCell(txt,lv,xx,yy){
+    let tx=xx+2;
+    if(lv){const rgb=h2rgb(LEV[lv].c);doc.setFillColor(rgb[0],rgb[1],rgb[2]);doc.circle(xx+3.5,yy+1.7,1.2,'F');tx=xx+6.6}
+    doc.text(pdfTxt(txt),tx,yy+4.7);
+  }
+  if(y>248){doc.addPage();y=Mg}
+  y=headRow(y);
+  if(!rows.length){
+    doc.setFontSize(9);doc.setTextColor(120);
+    doc.text('Aucune donnee sur la periode choisie.',Mg+2,y+4.7);
+    y+=8;
+  }
+  rows.forEach((p,i)=>{
+    if(y+7>282){doc.addPage();y=Mg+2;y=headRow(y)}
+    if(i%2===1){doc.setFillColor(245,242,233);doc.rect(Mg,y,Rg,7,'F')}
+    const d=peekDay(p.k);
+    const ms=d&&d.morning?slotStats(d.morning):null;
+    const es=d&&d.evening?slotStats(d.evening):null;
+    const gM=glyStatsOf(d&&d.morning),gE=glyStatsOf(d&&d.evening);
+    const gTxt=gs=>gs?frN(gs.avg/18,1)+(gs.n>1?(' x'+gs.n):'')+' ('+GLY_CTXS[gs.ctx]+')':'-';
+    const cells=[
+      {t:fmtMed(p.k)},
+      {t:ms?ms.sys+'/'+ms.dia:'-',lv:ms?bpLevel(ms.sys,ms.dia):null},
+      {t:(ms&&ms.hr!=null)?String(ms.hr):'-',lv:(ms&&ms.hr!=null)?pulseLevel(ms.hr):null},
+      {t:es?es.sys+'/'+es.dia:'-',lv:es?bpLevel(es.sys,es.dia):null},
+      {t:(es&&es.hr!=null)?String(es.hr):'-',lv:(es&&es.hr!=null)?pulseLevel(es.hr):null},
+      {t:gTxt(gM),lv:gM?glyLevelCtx(gM.avg,gM.ctx):null},
+      {t:gTxt(gE),lv:gE?glyLevelCtx(gE.avg,gE.ctx):null}
+    ];
+    doc.setFontSize(8.6);doc.setTextColor(25);
+    let xx=Mg;
+    cells.forEach((c,ci)=>{dataCell(c.t,c.lv,xx,y);xx+=cols[ci]});
+    doc.setDrawColor(226);doc.setLineWidth(.2);doc.line(Mg,y+7,Wp-Mg,y+7);
+    y+=7;
+  });
+  y+=5;
+  doc.setFontSize(8);doc.setTextColor(110);
+  const note='Repères : au domicile, une moyenne >= 135/85 mmHg évoque une hypertension ; à jeun et avant repas, une glycémie normale reste < 6,1 mmol/L (110 mg/dL) et >= 7,0 (126) évoque un diabète ; après repas, normale < 7,8 mmol/L (140) ; à confirmer par votre médecin.';
+  doc.text(doc.splitTextToSize(pdfTxt(note),Rg),Mg,y);
+
+  const n=doc.internal.getNumberOfPages();
+  for(let i=1;i<=n;i++){
+    doc.setPage(i);
+    doc.setFontSize(8);doc.setTextColor(130);
+    doc.text(pdfTxt('Systole - '+pat.name),Mg,291);
+    doc.text('Page '+i+'/'+n,Wp-Mg,291,{align:'right'});
+  }
+  const safe=pdfTxt(pat.name).normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'').toLowerCase()||'patient';
+  return{blob:doc.output('blob'),
+    name:'carnet-'+safe+'-'+fk.replace(/-/g,'')+'-'+tk.replace(/-/g,'')+'.pdf'};
+}
+
+/* secours impression système */
+function buildPrint(fk,tk){
+  const rows=collectRange(fk,tk);
+  const bpD=rows.filter(p=>p.sys!=null);
+  const hrL=rows.map(p=>p.hr).filter(v=>v!=null);
+  const gmL=rows.filter(p=>p.gm!=null),geL=rows.filter(p=>p.ge!=null);
+  const mR=bpD.length?(Math.round(avg(bpD.map(p=>p.sys)))+'/'+Math.round(avg(bpD.map(p=>p.dia)))):'—';
+  const tableRows=rows.map(p=>{
+    const d=peekDay(p.k),ms=slotStats(d.morning),es=slotStats(d.evening);
+    const gM=glyStatsOf(d.morning),gE=glyStatsOf(d.evening);
+    const f=st=>st?dotHTML(bpLevel(st.sys,st.dia))+(st.sys+'/'+st.dia):'—';
+    const fp=st=>(st&&st.hr!=null)?dotHTML(pulseLevel(st.hr))+st.hr:'—';
+    const fg=gs=>gs?dotHTML(glyLevelCtx(gs.avg,gs.ctx))+dualPlain(gs.avg)+(gs.n>1?' ×'+gs.n:'')+' ('+GLY_CTX[gs.ctx]+')':'—';
+    return '<tr><td>'+fmtLong(p.k)+'</td><td>'+f(ms)+'</td><td>'+fp(ms)+'</td><td>'+f(es)+'</td><td>'+fp(es)+'</td>'+
+      '<td>'+fg(gM)+'</td><td>'+fg(gE)+'</td></tr>';
+  }).join('');
+  $('#print-report').innerHTML=
+    '<h1>Systole — carnet de '+esc(cur().name)+'</h1>'+
+    '<p class="pr-sub">Période : du '+fmtLong(fk)+' au '+fmtLong(tk)+' ('+rows.length+' jour(s) renseigné(s)) · glycémie : mmol/L (mg/dL)</p>'+
+    '<div class="pr-stats">'+
+      '<span>Tension (période)&nbsp;: <b>'+mR+'</b> mmHg</span>'+
+      (hrL.length?('<span>Pouls moyen&nbsp;: <b>'+Math.round(avg(hrL))+'</b> bpm</span>'):'')+
+      (gmL.length?('<span>Gly moy. matin&nbsp;: <b>'+dualPlain(Math.round(avg(gmL.map(p=>p.gm))))+'</b></span>'):'')+
+      (geL.length?('<span>Gly moy. soir&nbsp;: <b>'+dualPlain(Math.round(avg(geL.map(p=>p.ge))))+'</b></span>'):'')+
+    '</div>'+
+    '<table class="prt">'+
+      '<thead><tr><th>Jour</th><th>Matin</th><th>Pouls</th><th>Soir</th><th>Pouls</th><th>Gly. matin (moy., contexte)</th><th>Gly. soir (moy., contexte)</th></tr></thead>'+
+      '<tbody>'+(tableRows||'<tr><td colspan="7">Aucune donnée sur la période.</td></tr>')+'</tbody>'+
+    '</table>'+
+    '<p class="pr-foot">'+legendThresholds().replace(/&lt;/g,'<')+' À confirmer médicalement.</p>';
+}
+
+/* ============ courbes ============ */
+function makeChart(opts){
+  const N=opts.N,pts=opts.pts,series=opts.series,th=opts.th||[];
+  if(!pts||!pts.length)return'';
+  const W=920,H=300,L=58,R=118,T=18,B=36,iw=W-L-R,ih=H-T-B;
+  const vals=[];
+  pts.forEach(p=>series.forEach(s=>{const v=s.get(p);if(v!=null)vals.push(v)}));
+  if(!vals.length)return'';
+  let lo=Math.floor((Math.min.apply(null,vals)-6)/10)*10;
+  let hi=Math.ceil((Math.max.apply(null,vals)+6)/10)*10;
+  if(lo===hi){lo-=10;hi+=10}
+  if(opts.lo0!=null)lo=Math.max(lo,opts.lo0);
+  if(opts.hi0!=null)hi=Math.min(hi,opts.hi0);
+  const s1=N-1;
+  let s0=Math.max(0,Math.min(pts[0].idx-1,s1-7));
+  if(s1-s0<2)s0=Math.max(0,s1-2);
+  const X=i=>L+((i-s0)/(s1-s0))*iw;
+  const Y=v=>T+ih*(1-(v-lo)/(hi-lo));
+  let s='<svg viewBox="0 0 '+W+' '+H+'" class="chart" role="img">';
+  const span=hi-lo;
+  const step=(span>120)?20:(span>60)?10:(span>24)?5:2;
+  for(let v=lo;v<=hi;v+=step){
+    const y=Y(v).toFixed(1);
+    s+='<line x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'" stroke="#E6DFCB" stroke-width="1"/>';
+    s+='<text x="'+(L-9)+'" y="'+(+y+3.5).toFixed(1)+'" text-anchor="end" class="ax">'+frN(v,step<2?1:0)+'</text>';
+  }
+  th.forEach(t=>{
+    const sv=t[0];
+    if(sv<lo||sv>hi)return;
+    const yy=Y(sv).toFixed(1);
+    s+='<line x1="'+L+'" y1="'+yy+'" x2="'+(W-R)+'" y2="'+yy+'" stroke="'+t[1]+'" stroke-width="1.3" stroke-dasharray="5 5" opacity=".55"/>';
+    s+='<text x="'+(W-R+8)+'" y="'+(+yy+3.5).toFixed(1)+'" class="seui" fill="'+t[1]+'">'+t[2]+'</text>';
+  });
+  const hspan=s1-s0,tick=Math.max(1,Math.round(hspan/5));
+  pts.forEach(p=>{
+    if((p.idx-s0)%tick===0||p===pts[pts.length-1])
+      s+='<text x="'+X(p.idx).toFixed(1)+'" y="'+(H-12)+'" text-anchor="middle" class="ax">'+fmtDay(p.k)+'</text>';
+  });
+  series.forEach(se=>{
+    const fmt=se.fmt||(v=>String(Math.round(v)));
+    let d='',prev=null,cnt=0;
+    pts.forEach(p=>{
+      const v=se.get(p);if(v==null)return;
+      const x=X(p.idx),y=Y(v);
+      d+=(prev!=null&&p.idx-prev<=2?(' L '+x.toFixed(1)+' '+y.toFixed(1)):(' M '+x.toFixed(1)+' '+y.toFixed(1)));
+      prev=p.idx;cnt++;
+    });
+    if(d)s+='<path d="'+d+'" fill="none" stroke="'+se.color+'" stroke-width="2.3" stroke-linejoin="round" stroke-linecap="round"/>';
+    pts.forEach(p=>{
+      const v=se.get(p);if(v==null)return;
+      const xv=X(p.idx),yv=Y(v);
+      const x=xv.toFixed(1),y=yv.toFixed(1);
+      const tipTxt=opts.tip?opts.tip(p):(p.sys+'/'+p.dia+' mmHg'+(p.hr!=null?(' · pouls '+p.hr):''));
+      s+='<circle cx="'+x+'" cy="'+y+'" r="3.3" fill="'+se.color+'" stroke="#FCFAF3" stroke-width="1.4"/>';
+      s+='<circle cx="'+x+'" cy="'+y+'" r="11" fill="transparent" class="pt" data-d="'+p.k+'" data-v="'+esc(tipTxt)+'"/>';
+      if(cnt<=20||p===pts[pts.length-1])
+        s+='<text x="'+x+'" y="'+(yv-8).toFixed(1)+'" text-anchor="middle" class="ptl" fill="'+se.color+'">'+fmt(v)+'</text>';
+    });
+  });
+  return s+'</svg>';
+}
+function gluChartSVG(pts){
+  const gp=pts.map(p=>({k:p.k,idx:p.idx,hr:p.hr,sys:p.sys,dia:p.dia,
+      gm:p.gm,ge:p.ge,gmn:p.gmn,gen:p.gen,gmc:p.gmc,gec:p.gec,
+      gmm:p.gm!=null?Math.round(p.gm/18*100)/100:null,
+      gee:p.ge!=null?Math.round(p.ge/18*100)/100:null}))
+    .filter(p=>p.gmm!=null||p.gee!=null);
+  if(!gp.length)return'';
+  return makeChart({N:state.range,pts:gp,
+    series:[{get:p=>p.gmm,color:'#3E4E85',fmt:v=>frN(v,1)},
+            {get:p=>p.gee,color:'#7B8BC4',fmt:v=>frN(v,1)}],
+    th:[[6.1,'#DD7A1F','jeun 6,1'],[7,'#B23A2A','jeun 7,0'],[7.8,'#6E7F3C','post 7,8'],[11.1,'#B23A2A','post 11,1']],
+    lo0:2,hi0:25,
+    tip:p=>{
+      const q=[];
+      if(p.gm!=null)q.push('matin moy '+dualPlain(p.gm)+' ('+p.gmn+' mes. · '+GLY_CTX[p.gmc]+')');
+      if(p.ge!=null)q.push('soir moy '+dualPlain(p.ge)+' ('+p.gen+' mes. · '+GLY_CTX[p.gec]+')');
+      return q.join(' · ');
+    }});
+}
+function chartBlock(make,label,fallback){
+  try{
+    const svg=make();
+    return svg||fallback;
+  }catch(err){
+    if(window.showFatal)window.showFatal('Courbe « '+label+' » : '+err.message);
+    return '<div class="empty">'+icon('alert')+' La courbe « '+label+' » n’a pas pu être tracée — l’erreur est affichée en haut de page.</div>';
+  }
+}
+function renderCharts(){
+  const host=$('#view-charts');
+  try{
+    const N=state.range;
+    const daily=collectDaily(N);
+    const bpDaily=daily.filter(p=>p.sys!=null&&p.dia!=null);
+    const gluDaily=daily.filter(p=>p.gm!=null||p.ge!=null);
+    const gmAll=gluDaily.filter(p=>p.gm!=null),geAll=gluDaily.filter(p=>p.ge!=null);
+    const rangeBtns=[14,30,90].map(r=>'<button type="button" data-r="'+r+'" class="'+(r===N?'on':'')+'">'+r+' j</button>').join('');
+    const bpPart=bpDaily.length>=1
+      ?'<div class="legend"><span><i class="sw sw-sys"></i>Systolique</span><span><i class="sw sw-dia"></i>Diastolique</span><span><i class="sw sw-seuil"></i>Seuil 135 / 85</span></div>'+
+       chartBlock(()=>makeChart({N:N,pts:bpDaily,lo0:40,hi0:210,
+          series:[{get:p=>p.sys,color:'#222A35'},{get:p=>p.dia,color:'#B23A2A'}],
+          th:[[135,'#B05F2C','HTA 135'],[85,'#B05F2C','HTA 85']]}),'tension',
+          '<div class="empty">'+icon('activity')+' Aucune donnée de tension à tracer.</div>')+
+       '<div class="stats-line">'+bpStats(bpDaily)+'</div>'
+      :'<div class="empty">'+icon('tensiometer')+' Aucune tension enregistrée pour le moment — saisissez une prise dans l’onglet Saisie et la courbe apparaîtra ici immédiatement.</div>';
+    const gluStats=[];
+    if(gmAll.length){const a=Math.round(avg(gmAll.map(p=>p.gm)));const ctx=glyMajorArr(gmAll.map(p=>p.gmc));
+      gluStats.push('<span>'+dotHTML(glyLevelCtx(a,ctx))+'moyenne matin <b>'+dualFull(a)+'</b> <span class="mut">('+GLY_CTX[ctx]+')</span></span>')}
+    if(geAll.length){const a=Math.round(avg(geAll.map(p=>p.ge)));const ctx=glyMajorArr(geAll.map(p=>p.gec));
+      gluStats.push('<span>'+dotHTML(glyLevelCtx(a,ctx))+'moyenne soir <b>'+dualFull(a)+'</b> <span class="mut">('+GLY_CTX[ctx]+')</span></span>')}
+    const gluPart=gluDaily.length>=1
+      ?'<div class="legend"><span><i class="sw" style="border-color:#3E4E85"></i>Matin · moyenne</span><span><i class="sw" style="border-color:#7B8BC4"></i>Soir · moyenne</span></div>'+
+       chartBlock(()=>gluChartSVG(gluDaily),'glycémie',
+          '<div class="empty">'+icon('droplet')+' Aucune glycémie à tracer.</div>')+
+       '<div class="stats-line"><span><b>'+gluDaily.length+'</b> jour'+(gluDaily.length>1?'s':'')+' avec glycémie</span>'+gluStats.join('')+'</div>'
+      :'<div class="empty">'+icon('droplet')+' Aucune glycémie enregistrée pour le moment — notez-la dans la fiche de saisie (à jeun, avant ou après repas) ; elle suffira à elle seule à dessiner cette courbe.</div>';
+    host.innerHTML=
+     '<div class="lvl-note top" style="padding-left:30px;padding-right:30px">'+legendDots()+' <span class="mut">'+legendThresholds()+'</span></div>'+
+     '<section class="chart-sec">'+
+       '<div class="chart-head">'+
+         '<div><h3>'+icon('tensiometer')+esc(cur().name)+' — tension artérielle</h3>'+
+         '<p class="chart-sub">Moyennes journalières (matin + soir) — <b>'+bpDaily.length+'</b> jour'+(bpDaily.length>1?'s':'')+' avec tension sur la fenêtre de '+N+' jours. Survolez un point pour le détail.</p></div>'+
+         '<div class="seg" id="rangeSeg">'+rangeBtns+'</div>'+
+       '</div>'+
+       bpPart+
+     '</section>'+
+     '<section class="chart-sec">'+
+       '<div class="chart-head"><div><h3 class="g-h">'+icon('droplet')+'Glycémie</h3>'+
+       '<p class="chart-sub">Moyennes journalières, en mmol/L — repères : à jeun/avant repas 6,1 et 7,0 · après repas 7,8 et 11,1 ; les infos-bulles précisent le nombre de mesures et leur contexte — <b>'+gluDaily.length+'</b> jour'+(gluDaily.length>1?'s':'')+' avec glycémie.</p></div></div>'+
+       gluPart+
+     '</section>';
+    $('#rangeSeg').addEventListener('click',e=>{
+      const b=e.target.closest('button');if(!b)return;
+      state.range=+b.dataset.r;renderCharts();
+    });
+    const tip=$('#tip');
+    $$('#view-charts .pt').forEach(c=>{
+      c.addEventListener('mouseenter',()=>{
+        tip.innerHTML='<div class="t-date">'+fmtLong(c.dataset.d)+'</div><div class="t-val">'+c.dataset.v+'</div>';
+        tip.classList.add('show');
+      });
+      c.addEventListener('mousemove',e=>{tip.style.left=e.clientX+'px';tip.style.top=(e.clientY-8)+'px'});
+      c.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+    });
+  }catch(err){
+    host.innerHTML='<div class="empty">'+icon('alert')+' La vue Courbes n’a pas pu s’afficher — l’erreur est indiquée en haut de page.</div>';
+    if(window.showFatal)window.showFatal('Courbes : '+err.message);
+  }
+}
+function bpStats(pts){
+  if(!pts.length)return'';
+  const hrs=pts.map(p=>p.hr).filter(v=>v!=null);
+  const aS=Math.round(avg(pts.map(p=>p.sys))),aD=Math.round(avg(pts.map(p=>p.dia)));
+  const high=pts.filter(p=>p.sys>=135||p.dia>=85).length;
+  const n=pts.length;
+  const aHr=hrs.length?Math.round(avg(hrs)):null;
+  return '<span><b>'+n+'</b> jour'+(n>1?'s':'')+' renseigné'+(n>1?'s':'')+'</span>'+
+    '<span>'+dotHTML(bpLevel(aS,aD))+'moyenne <b>'+aS+'/'+aD+'</b> mmHg</span>'+
+    (aHr!=null?('<span>'+dotHTML(pulseLevel(aHr))+'pouls moyen <b>'+aHr+'</b> bpm</span>'):'')+
+    '<span><b>'+high+'</b> jour'+(high>1?'s':'')+' au-dessus de 135/85</span>';
+}
+
+/* ============ toasts / réglages ============ */
+function toast(msg,ic,ms){
+  const t=document.createElement('div');
+  t.className='toast'+(ic==='alert'?' warn':'');
+  t.innerHTML=icon(ic==='alert'?'alert':(ic||'check'))+'<span>'+msg+'</span>';
+  $('#toasts').appendChild(t);
+  setTimeout(()=>{t.classList.add('out');setTimeout(()=>t.remove(),260)},ms||4200);
+}
+const closeModal=()=>{$('#modal-root').innerHTML='';$('#tip').classList.remove('show')};
+function openSettings(){
+  const p=cur();
+  const rows=store.patients.map(pp=>{
+    const col=PATS[pp.color%6],act=pp.id===store.active;
+    return '<div class="pat-row">'+
+      '<span class="seal-mini" style="background:'+col+'">'+esc(initials(pp.name))+'</span>'+
+      '<span class="pat-name">'+esc(pp.name)+(act?' <span class="you">— dossier actif</span>':'')+'</span>'+
+      '<button class="icon-btn p-del" data-id="'+pp.id+'" data-armed="" '+(store.patients.length<=1?'disabled title="Au moins un dossier doit rester"':'title="Supprimer ce dossier (double confirmation)"')+'>'+icon('trash')+'</button>'+
+    '</div>';
+  }).join('');
+  $('#modal-root').innerHTML=
+   '<div class="overlay" id="ovl">'+
+    '<div class="modal" role="dialog" aria-modal="true" aria-label="Réglages">'+
+      '<header>Réglages <button class="icon-btn" id="mX" aria-label="Fermer">'+icon('x')+'</button></header>'+
+      '<div class="m-body">'+
+        '<div class="fld"><label for="fName">Nom du dossier actif <span>— figure sur les registres et les PDF</span></label>'+
+          '<input type="text" id="fName" value="'+esc(p.name)+'" placeholder="ex. Camille Durand" maxlength="60"></div>'+
+        '<div class="fld"><label>Unité de saisie de la glycémie <span>— l’affichage reste toujours mmol/L (mg/dL)</span></label>'+
+          '<div class="radio-row">'+
+            '<label class="rad"><input type="radio" name="unit" value="mgdl" '+(p.unit!=='mmol'?'checked':'')+'> mg/dL</label>'+
+            '<label class="rad"><input type="radio" name="unit" value="mmol" '+(p.unit==='mmol'?'checked':'')+'> mmol/L</label>'+
+          '</div></div>'+
+        '<div class="fld"><label>Dossiers patients <span>— '+store.patients.length+' sur '+MAX_PAT+' · ajoutez-en via « Nouveau dossier »</span></label>'+
+          rows+
+          '<p class="hint">La suppression d’un dossier efface définitivement son carnet (double clic de confirmation).</p></div>'+
+        '<div class="m-actions">'+
+          '<button class="btn ghost" id="mExport">'+icon('download')+' Sauvegarde JSON</button>'+
+          '<button class="btn ghost" id="mShare">'+icon('share')+' Partager JSON</button>'+
+          '<button class="btn ghost" id="mImport">'+icon('up')+' Restaurer</button>'+
+          '<input type="file" id="fImport" accept="application/json,.json" hidden>'+
+          '<button class="btn danger" id="mWipe">'+icon('trash')+' Tout effacer</button>'+
+        '</div>'+
+        '<p class="hint" style="margin-top:-8px">'+esc(saveCapabilityNote())+'</p>'+
+      '</div>'+
+      '<footer class="m-foot"><button class="btn" id="mOk">Fermer</button></footer>'+
+    '</div>'+
+   '</div>';
+  $('#ovl').addEventListener('click',e=>{if(e.target.id==='ovl')closeModal()});
+  $('#mX').onclick=closeModal;
+  $('#mOk').onclick=closeModal;
+  $('#fName').addEventListener('input',e=>{p.name=e.target.value;save();renderDossiers()});
+  $$('input[name=unit]').forEach(r=>r.addEventListener('change',e=>{
+    p.unit=e.target.value;save();
+    if(state.tab==='today'){renderSlot('morning');renderSlot('evening');renderGlucoFoot()}
+    if(state.tab==='charts')renderCharts();
+    toast('Unité de saisie du dossier : '+gUnitLabel()+' — affichage inchangé : mmol/L (mg/dL).');
+  }));
+  $$('.p-del').forEach(b=>{
+    b.onclick=()=>{
+      if(b.disabled)return;
+      if(b.dataset.armed==='1'){
+        const id=b.dataset.id;
+        store.patients=store.patients.filter(pp=>pp.id!==id);
+        if(store.active===id)store.active=store.patients[0].id;
+        save();applyPatientTheme();
+        switchTab(state.tab);
+        openSettings();
+        toast('Dossier supprimé.','alert');
+      }else{
+        b.dataset.armed='1';b.classList.add('armed');
+        b.innerHTML=icon('alert');
+        setTimeout(()=>{
+          if(document.body.contains(b)&&b.dataset.armed==='1'){
+            b.dataset.armed='';b.classList.remove('armed');b.innerHTML=icon('trash');
+          }
+        },3500);
+      }
+    };
+  });
+  $('#mExport').onclick=async()=>{
+    const res=await saveFile(new Blob([JSON.stringify(store,null,1)],{type:'application/json'}),
+      'systole-sauvegarde-'+todayISO()+'.json','Sauvegarde JSON','application/json','.json');
+    reportSave(res,'Sauvegarde (tous les dossiers)');
+  };
+  $('#mShare').onclick=()=>{
+    const blob=new Blob([JSON.stringify(store,null,1)],{type:'application/json'});
+    shareBlob(blob,'systole-sauvegarde-'+todayISO()+'.json','application/json','Sauvegarde JSON');
+  };
+  $('#mImport').onclick=()=>$('#fImport').click();
+  $('#fImport').addEventListener('change',e=>{
+    const f=e.target.files[0];if(!f)return;
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const d=JSON.parse(r.result);
+        if(!d||!Array.isArray(d.patients)||!d.patients.length)throw new Error('format invalide');
+        store=normalizeStore(d);
+        save();applyPatientTheme();closeModal();
+        state.date=todayISO();
+        switchTab(state.tab);
+        toast('Sauvegarde restaurée — '+store.patients.length+' dossier(s).');
+      }catch(err){toast('Fichier illisible — sauvegarde invalide.','alert')}
+    };
+    r.readAsText(f);
+  });
+  let armed=false;
+  $('#mWipe').onclick=e=>{
+    const b=e.currentTarget;
+    if(!armed){
+      armed=true;b.classList.add('armed');
+      b.innerHTML=icon('alert')+' Confirmer l’effacement';
+      setTimeout(()=>{armed=false;if(document.body.contains(b)){b.classList.remove('armed');b.innerHTML=icon('trash')+' Tout effacer'}},4000);
+    }else{
+      try{localStorage.removeItem(LS)}catch(_){}
+      const np=makePatient('Patient 1',0,'mgdl');
+      store={active:np.id,patients:[np]};
+      save();applyPatientTheme();closeModal();
+      state.date=todayISO();
+      switchTab(state.tab);
+      toast('Toutes les données ont été effacées.','alert');
+    }
+  };
+}
+
+/* ============ navigation & démarrage ============ */
+function switchTab(t){
+  state.tab=t;
+  $$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===t));
+  $('#view-today').hidden=t!=='today';
+  $('#view-register').hidden=t!=='register';
+  $('#view-charts').hidden=t!=='charts';
+  renderDossiers();
+  if(t==='today')renderSheet();else if(t==='register')renderRegister();else renderCharts();
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+
+window.Systole={openSettings,tab:switchTab};
+
+try{
+  applyPatientTheme();
+  $('#seal').innerHTML=icon('tensiometer');
+  $('#mastheadDate').textContent=fmtLong(todayISO());
+  switchTab('today');
+}catch(err){
+  if(window.showFatal)window.showFatal(err&&err.message?err.message:String(err));
+}
+</script>
+</body>
+</html>
